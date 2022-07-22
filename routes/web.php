@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\MusimController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -34,4 +36,16 @@ Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('user', [UsersController::class, 'index']);
 Route::post('user/insert', [UsersController::class, 'insert']);
 Route::get('user/delete/{id}', [UsersController::class, 'delete']);
-Route::get('user/update/{id}', [UsersController::class, 'update']);
+Route::post('user/update', [UsersController::class, 'update']);
+
+//team
+Route::get('team', [TeamController::class, 'index']);
+Route::post('team/insert', [TeamController::class, 'insert']);
+Route::get('team/delete/{id}', [TeamController::class, 'delete']);
+Route::post('team/update', [TeamController::class, 'update']);
+
+//musim
+Route::get('musim', [MusimController::class, 'index']);
+Route::post('musim/insert', [MusimController::class, 'insert']);
+Route::get('musim/delete/{id}', [MusimController::class, 'delete']);
+Route::post('musim/update', [MusimController::class, 'update']);

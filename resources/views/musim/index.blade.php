@@ -19,8 +19,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th>Musim</th>
                     <th width="50">Action</th>
                   </tr>
                   </thead>
@@ -29,15 +28,14 @@
                   	@foreach ($data as $key)
 					    
   					         <tr>
-  	                    <td>{{ $key->user_name }}</td>
-  	                    <td>{{ $key->user_email }}</td>
+  	                    <td>{{ $key->musim_tahun }}</td>
   	                    <td>
-  	                    	<button data-toggle="modal" data-target="#modal-edit{{ $key->user_id }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
-  	                    	<button type="button" onclick="del('user/delete/{{ $key->user_id }}')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+  	                    	<button data-toggle="modal" data-target="#modal-edit{{ $key->musim_id }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
+  	                    	<button type="button" onclick="del('musim/delete/{{ $key->musim_id }}')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
   	                    </td>
   	                  </tr>
 
-                      <div class="modal fade" id="modal-edit{{ $key->user_id }}">
+                      <div class="modal fade" id="modal-edit{{ $key->musim_id }}">
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -47,24 +45,21 @@
                               </button>
                             </div>
                             <div class="modal-body">
-                              <form method="post" action="{{ url('user/update') }}">
+                              <form method="post" action="{{ url('musim/update') }}">
                                 @csrf
 
                                 <!--id-->
-                                <input type="hidden" name="id" class="form-control" value="{{ $key->user_id }}">
+                                <input type="hidden" name="id" class="form-control" value="{{ $key->musim_id }}">
+
+                                <?php $tahun = explode('-', $key->musim_tahun) ?>
 
                                 <div class="form-group">
-                                  <label>Name</label>
-                                  <input type="text" name="name" class="form-control" required="" placeholder="Full Name" value="{{ $key->user_name }}">
+                                  <label>Awal Musim</label>
+                                  <input type="text" name="awal" class="form-control" required="" placeholder="example : 2021" value="{{ $tahun[0] }}">
                                 </div>
                                 <div class="form-group">
-                                  <label>Email</label>
-                                  <input type="email" name="email" class="form-control" required="" placeholder="example@gmail.com" value="{{ $key->user_email }}">
-                                </div>
-                                <div class="form-group">
-                                  <label>Password</label>
-                                  <input type="password" name="password" class="form-control" placeholder="Uniq password" autocomplete="new-password">
-                                  <small class="text-danger">* fill to change password</small>
+                                  <label>Musim Berakhir</label>
+                                  <input type="text" name="akhir" class="form-control" required="" placeholder="example : 2023" value="{{ $tahun[1] }}">
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -107,19 +102,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="{{ url('user/insert') }}">
+        <form method="post" action="{{ url('musim/insert') }}">
           @csrf
           <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" required="" placeholder="Full Name">
+            <label>Awal Musim</label>
+            <input type="number" name="awal" class="form-control" required="" placeholder="example : 2021">
           </div>
           <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required="" placeholder="example@gmail.com">
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control" required="" placeholder="Uniq password">
+            <label>Musim Berakhir</label>
+            <input type="number" name="akhir" class="form-control" required="" placeholder="example : 2023">
           </div>
       </div>
       <div class="modal-footer justify-content-between">
