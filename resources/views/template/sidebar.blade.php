@@ -89,13 +89,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link {{ Request::is('jadwal*') ? 'active' : '' }}">
+                <a href="{{ url('jadwal') }}" class="nav-link {{ Request::is('jadwal*') ? 'active' : '' }}">
                   <i class="far fa-clock nav-icon"></i>
                   <p>Jadwal Pertandingan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link {{ Request::is('hasil*') ? 'active' : '' }}">
+                <a href="{{ url('hasil') }}" class="nav-link {{ Request::is('hasil*') ? 'active' : '' }}">
                   <i class="nav-icon fa fa-tasks"></i>
                   <p>Hasil Pertandingan</p>
                 </a>
@@ -104,7 +104,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ Request::is('klasemen*') ? 'active' : '' }}">
+            <a href="{{ url('klasemen') }}" class="nav-link {{ Request::is('klasemen*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-trophy"></i>
               <p>
                 Klasemen

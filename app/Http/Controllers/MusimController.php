@@ -11,10 +11,18 @@ class MusimController extends Controller
 {
     public function index()
     {
-        $data['title'] = 'Musim';
-        $data['data'] =  Musim::select('musim_id','musim_tahun')->orderBy('musim_id', 'DESC')->where('musim_delete', 0)->get();
 
-        return view('musim/index',$data);
+        if (Session::get('login') == 1) {
+            
+            $data['title'] = 'Musim';
+            $data['data'] =  Musim::select('musim_id','musim_tahun')->orderBy('musim_id', 'DESC')->where('musim_delete', 0)->get();
+
+            return view('musim/index',$data);
+
+        } else {
+            
+            return redirect('/login');
+        }
     }
     public function insert(Request $request){
 

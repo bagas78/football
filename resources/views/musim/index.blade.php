@@ -14,7 +14,7 @@
               <!-- /.card-header -->
               <div class="card-body">
 
-              	<button data-toggle="modal" data-target="#modal-insert" class="btn btn-primary btn-sm mb-3"><i class="fa fa-plus"></i> Add Data</button>
+              	<button data-toggle="modal" data-target="#modal-insert" class="btn btn-primary mb-3"><i class="fa fa-plus"></i> Add Data</button>
 
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>

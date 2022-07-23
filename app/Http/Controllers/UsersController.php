@@ -11,10 +11,17 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $data['title'] = 'User Control';
-        $data['data'] =  User::select('user_id','user_name','user_email')->orderBy('user_id', 'DESC')->where('user_delete', 0)->get();
+        if (Session::get('login') == 1) {
+            
+            $data['title'] = 'User Control';
+            $data['data'] =  User::select('user_id','user_name','user_email')->orderBy('user_id', 'DESC')->where('user_delete', 0)->get();
 
-        return view('user/index',$data);
+            return view('user/index',$data);
+
+        } else {
+            
+            return redirect('/login');
+        }
     }
     public function insert(Request $request){
 

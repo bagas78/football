@@ -8,6 +8,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MusimController;
+use App\Http\Controllers\JadwalController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -49,3 +50,9 @@ Route::get('musim', [MusimController::class, 'index']);
 Route::post('musim/insert', [MusimController::class, 'insert']);
 Route::get('musim/delete/{id}', [MusimController::class, 'delete']);
 Route::post('musim/update', [MusimController::class, 'update']);
+
+//jadwal
+Route::get('jadwal', [JadwalController::class, 'index']);
+Route::post('jadwal/insert', [JadwalController::class, 'insert']);
+Route::get('jadwal/delete/{id}', [JadwalController::class, 'delete']);
+Route::post('jadwal/update', [JadwalController::class, 'update']);

@@ -12,10 +12,17 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $data['title'] = 'Team';
-        $data['data'] =  Team::where('team_delete', 0)->orderBy('team_id', 'DESC')->get();
+        if (Session::get('login') == 1) {
+            
+            $data['title'] = 'Team';
+            $data['data'] =  Team::where('team_delete', 0)->orderBy('team_id', 'DESC')->get();
 
-        return view('team/index',$data);
+            return view('team/index',$data);
+
+        } else {
+            
+            return redirect('/login');
+        }
     }
     public function insert(Request $request){
 
