@@ -41,36 +41,46 @@ class JadwalController extends Controller
         $r = $a * (($a-1) /2);
 
         //pembagian
-        $i = $r / ($a - 1);
+        $i = $a - 1;
 
         //pekan
         $p = $r / $i;
 
         $no = 1;
+        $arr = array();
         foreach ($team->shuffle() as $key1) {
 
             foreach ($team->shuffle() as $key2) {
                 
-                $in = $key1->team_id.','.$key2->team_id;
-                $sum = $key1->team_id + $key2->team_id;
+                $musim = $request->musim;
+                $left = $key1->team_id.','.$key2->team_id;
+                $right = $key2->team_id.','.$key1->team_id;
 
-                $cek = Jadwal::where('jadwal_team','!=',$in)->where('jadwal_sum','!=',$sum);
+                $cek = Jadwal::where('jadwal_musim', $musim)->where('jadwal_team', $left)->where('jadwal_team', $left)->orWhere('jadwal_team', $right)->count();
 
-                if ($cek && $key1->team_id != $key2->team_id) {
-                   
-                    $jadwal = new Jadwal;
-                    $jadwal->jadwal_team = $in;
-                    $jadwal->jadwal_team = $sum;
-                    $jadwal->jadwal_pekan = '';
-                    $jadwal->jadwal_pertandingan = '';
-                    $jadwal->jadwal_musim = $request->musim;
-                    $jadwal->save();
+                if ($cek == 0 && $key1->team_id != $key2->team_id) {
+
+                   if ($no <= $r) {                        
+
+                        $jadwal = new Jadwal;
+                        $jadwal->jadwal_team = $left;
+                        $jadwal->jadwal_pekan = '';
+                        $jadwal->jadwal_pertandingan = '';
+                        $jadwal->jadwal_musim = $request->musim;
+                        $jadwal->save();
+
+                        $no++;
+                   } else {
+                       
+                       return;
+                   }
+
                 }
             }           
         }
 
         //$key1->team_id != $key2['team_id']
-        // echo '<pre>';
-        //echo $r;
+        //echo '<pre>';
+        //print_r(count($arr));
     }
 }

@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id('jadwal_id');
             $table->string('jadwal_team');
-            $table->string('jadwal_sum');
             $table->string('jadwal_pekan');
             $table->string('jadwal_pertandingan');
             $table->string('jadwal_musim');

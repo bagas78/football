@@ -13,7 +13,6 @@ class Jadwal extends Model
 
     protected $fillable = [
         'jadwal_team',
-        'jadwal_sum',
         'jadwal_pekan',
         'jadwal_pertandingan',
         'jadwal_musim',
