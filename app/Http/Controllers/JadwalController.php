@@ -56,7 +56,7 @@ class JadwalController extends Controller
                 $left = $key1->team_id.','.$key2->team_id;
                 $right = $key2->team_id.','.$key1->team_id;
 
-                $cek = Jadwal::where('jadwal_musim', $musim)->where('jadwal_team', $left)->where('jadwal_team', $left)->orWhere('jadwal_team', $right)->count();
+                $cek = Jadwal::where('jadwal_musim', $musim)->where('jadwal_team', $left)->orWhere('jadwal_team', $right)->count();
 
                 if ($cek == 0 && $key1->team_id != $key2->team_id) {
 
@@ -67,17 +67,27 @@ class JadwalController extends Controller
                         $jadwal->jadwal_pekan = '';
                         $jadwal->jadwal_pertandingan = '';
                         $jadwal->jadwal_musim = $request->musim;
-                        $jadwal->save();
+                        //$jadwal->save();
 
                         $no++;
-                   } else {
-                       
-                       return;
-                   }
+
+                        if ($no == $r) {
+                            
+                            $go = 1;
+                        }
+                   } 
 
                 }
             }           
         }
+
+        //if (@$go == 1) {
+            
+            for ($x=0; $x < $i; $x++) { 
+                
+                echo $x;
+            }
+        //}
 
         //$key1->team_id != $key2['team_id']
         //echo '<pre>';

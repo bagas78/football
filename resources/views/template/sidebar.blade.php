@@ -16,7 +16,7 @@
  <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-    <img style="width: 100%; padding: 3%; border-radius: 20px;" class="img" src="/img/logo.png">
+    <img style="width: 100%; padding: 3%; border-radius: 20px;" class="img" src="{{ url('img/logo.png') }}">
 
     <!-- Sidebar -->
     <div class="sidebar">
