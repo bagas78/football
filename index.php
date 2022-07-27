@@ -1,0 +1,1 @@
+<?php echo header('location: /football/public/login'); ?>
