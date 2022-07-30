@@ -17,18 +17,22 @@ class JadwalController extends Controller
         
         if (Session::get('login') == 1) {
             
-            $data['title'] = 'Jadwal';
+            $data['title'] = 'Jadwal Pertandingan';
             $data['data'] = Jadwal::where('jadwal_delete', 0)->get();
             $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();
             return view('jadwal/index',$data);
 
         } else { 
             
-            return redirect('/login');
+            return redirect('/login'); 
         }
         
     }
     public function insert(Request $request){
+
+        //delete table
+        DB::table('current')->delete();  
+        DB::table('jadwal')->delete();  
 
         $team = Team::where('team_delete', 0)->get();
         $jadwal = Jadwal::where('jadwal_delete', 0)->get();
@@ -93,6 +97,8 @@ class JadwalController extends Controller
 
         if (@$go == 1) {
 
+            $second = 1;
+
             reloop:
 
             for ($x=1; $x < $i+1; $x++) { 
@@ -112,8 +118,6 @@ class JadwalController extends Controller
                             $current = new Current;
                             $current->current_pekan = $x;
                             $current->current_arr = $c->jadwal_team;
-                            $current->current_lost = '';
-                            $current->current_minus = '';
                             $current->save();
 
                         } else {
@@ -139,7 +143,15 @@ class JadwalController extends Controller
                             $j_id = $c->jadwal_id;
                             
                             if (Jadwal::where('jadwal_pekan', $x)->count() < $p) {
-                                $update = Jadwal::where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x]);
+
+                                //tanggal
+                                $day = $x * 7;
+                                $date = $request->tanggal;
+                                $date = strtotime($date);
+                                $date = strtotime("+{$day} day", $date);
+                                $final_date = date('Y-m-d', $date);
+
+                                $update = Jadwal::where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x, 'jadwal_pertandingan' => $final_date]);
                             }
                         }
                         
@@ -162,27 +174,63 @@ class JadwalController extends Controller
                    
                    if ($cc->current_pekan == $x) {
                         
-                        $lost = array_diff(explode(',', $cc->current_arr), $arr_jad);
-                        $final = implode(',', array_diff(explode(',', $cc->current_arr), $lost));
+                        $ls = array_diff(explode(',', $cc->current_arr), $arr_jad);
+                        $final = implode(',', array_diff(explode(',', $cc->current_arr), $ls));
 
                         $update = Current::where('current_pekan', $x)->update(['current_arr' => $final]);
                    }
                }
             }
 
-           if (Jadwal::where('jadwal_pekan','')->count() > 0) {
+
+           $second++;
+
+           //eksekusi 30x
+           if ($second != 30) {
+
                 goto reloop;
+
            } else {
 
-               //delete current
-               DB::table('current')->delete();  
-               return;
+                if (Jadwal::where('jadwal_pekan','')->count() > 0) {
+                    
+                    //ada yang kosong
+                    $xx = DB::select("SELECT jadwal_pekan AS pekan,COUNT(jadwal_pekan) AS jum FROM jadwal WHERE jadwal_pekan != '' GROUP BY jadwal_pekan");
+
+                    foreach ($xx as $key) {
+                        
+                        if ($key->jum <= $p) {
+                            
+                            for ($i=0; $i < $p - $key->jum; $i++) { 
+
+                                //tanggal
+                                $day = $key->pekan * 7;
+                                $date = $request->tanggal;
+                                $date = strtotime($date);
+                                $date = strtotime("+{$day} day", $date);
+                                $final_date = date('Y-m-d', $date);
+                                
+                                Jadwal::where('jadwal_pekan', '')->take(1)->update(['jadwal_pekan' => $key->pekan, 'jadwal_pertandingan' => $final_date]); 
+                            }
+                        }
+                    }
+
+                } 
            }
 
         }
 
 
-        print_r(ignore_user_abort());
+        if (Jadwal::where('jadwal_pekan','')->count() > 0) {
+            
+            $ses = ['fail' => 'Data ada yang gagal di simpan'];
+        } else {
+            
+            $ses = ['success' => 'Data berhasil di simpan'];
+        }
+        
+
+        return redirect('jadwal')->with($ses);
 
     }
 }

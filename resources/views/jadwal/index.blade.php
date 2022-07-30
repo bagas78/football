@@ -14,7 +14,7 @@
               <!-- /.card-header -->
               <div class="card-body">
 
-                <form method="POST" action="#">
+                <form method="POST" action="#"> 
 
                 <div class="row">
                   <div class="col-3">
@@ -83,6 +83,10 @@
                 <option value="{{ $key->musim_id }}">{{ $key->musim_tahun }}</option>
               @endforeach
             </select>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Mulai</label>
+            <input required="" type="date" name="tanggal" class="form-control">
           </div>
       </div>
       <div class="modal-footer justify-content-between">

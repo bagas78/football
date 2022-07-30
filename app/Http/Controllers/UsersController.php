@@ -13,7 +13,7 @@ class UsersController extends Controller
     {
         if (Session::get('login') == 1) {
             
-            $data['title'] = 'User Control';
+            $data['title'] = 'Kontrol Pengguna';
             $data['data'] =  User::select('user_id','user_name','user_email')->orderBy('user_id', 'DESC')->where('user_delete', 0)->get();
 
             return view('user/index',$data);
@@ -41,13 +41,13 @@ class UsersController extends Controller
             $user->user_password = bcrypt($password);
             
             if($user->save()){
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             } else {
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
         } else {
             // exist
-            $ses = ['fail' => 'Data already exist'];
+            $ses = ['fail' => 'Data sudah ada'];
         }
 
         return redirect('user')->with($ses);
@@ -56,9 +56,9 @@ class UsersController extends Controller
         $update = User::where('user_id', $id)->update(['user_delete' => 1]);
 
         if ($update > 0) {
-            $ses = ['success' => 'Data saved successfully'];
+            $ses = ['success' => 'Data berhasil di simpan'];
         } else {
-            $ses = ['fail' => 'Data failed to save'];
+            $ses = ['fail' => 'Data gagal di simpan'];
         }
 
         return redirect('user')->with($ses);
@@ -96,13 +96,13 @@ class UsersController extends Controller
             $update = User::where('user_id', $id)->update($arr);
             
             if($update > 0){
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             } else {
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
         } else {
             // exist
-            $ses = ['fail' => 'Data already exist'];
+            $ses = ['fail' => 'Data sudah ada'];
         }
 
         return redirect('user')->with($ses);

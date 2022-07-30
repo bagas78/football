@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id('current_id');
             $table->string('current_pekan');
             $table->text('current_arr');
-            $table->text('current_lost');
-            $table->text('current_minus');
             $table->timestamps();
         });
     }

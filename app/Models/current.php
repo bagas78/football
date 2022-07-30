@@ -14,7 +14,5 @@ class current extends Model
     protected $fillable = [
         'current_pekan',
         'current_arr',
-        'current_lost',
-        'current_minus',
     ];
 }

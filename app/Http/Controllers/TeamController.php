@@ -14,7 +14,7 @@ class TeamController extends Controller
     {
         if (Session::get('login') == 1) {
             
-            $data['title'] = 'Team';
+            $data['title'] = 'Tim';
             $data['data'] =  Team::where('team_delete', 0)->orderBy('team_id', 'DESC')->get();
 
             return view('team/index',$data);
@@ -53,14 +53,14 @@ class TeamController extends Controller
                 $team->team_logo = $new_name;
                 $team->save();
 
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             }else{
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
 
         } else {
             // no upload
-            $ses = ['fail' => 'Format file not suport'];
+            $ses = ['fail' => 'Format file tidak di dukung'];
         }
 
         return redirect('team')->with($ses);
@@ -69,9 +69,9 @@ class TeamController extends Controller
         $update = Team::where('team_id', $id)->update(['team_delete' => 1]);
 
         if ($update > 0) {
-            $ses = ['success' => 'Data saved successfully'];
+            $ses = ['success' => 'Data berhasil di simpan'];
         } else {
-            $ses = ['fail' => 'Data failed to save'];
+            $ses = ['fail' => 'Data gagal di simpan'];
         }
 
         return redirect('team')->with($ses);
@@ -111,23 +111,23 @@ class TeamController extends Controller
                     //save database
                     Team::where('team_id', $id)->update($set);
 
-                    $ses = ['success' => 'Data saved successfully'];
+                    $ses = ['success' => 'Data berhasil di simpan'];
                 }else{
-                    $ses = ['fail' => 'Data failed to save'];
+                    $ses = ['fail' => 'Data gagal di simpan'];
                 }
 
             } else {
                 // no upload
-                $ses = ['fail' => 'Format file not suport'];
+                $ses = ['fail' => 'Format file tidak di dukung'];
             }
 
         } else {
             // no logo
             $update = Team::where('team_id', $id)->update(['team_name' => $name]);
             if ($update > 0) {
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             } else {
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
         }
         

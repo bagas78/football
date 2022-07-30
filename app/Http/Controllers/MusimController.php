@@ -14,7 +14,7 @@ class MusimController extends Controller
 
         if (Session::get('login') == 1) {
             
-            $data['title'] = 'Musim';
+            $data['title'] = 'Musim Liga';
             $data['data'] =  Musim::select('musim_id','musim_tahun')->orderBy('musim_id', 'DESC')->where('musim_delete', 0)->get();
 
             return view('musim/index',$data);
@@ -38,13 +38,13 @@ class MusimController extends Controller
             $musim->musim_tahun = $tahun;
             
             if($musim->save()){
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             } else {
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
         } else {
             // exist
-            $ses = ['fail' => 'Data already exist'];
+            $ses = ['fail' => 'Data sudah ada'];
         }
 
         return redirect('musim')->with($ses);
@@ -53,9 +53,9 @@ class MusimController extends Controller
         $update = Musim::where('musim_id', $id)->update(['musim_delete' => 1]);
 
         if ($update > 0) {
-            $ses = ['success' => 'Data saved successfully'];
+            $ses = ['success' => 'Data berhasil di simpan'];
         } else {
-            $ses = ['fail' => 'Data failed to save'];
+            $ses = ['fail' => 'Data gagal di simpan'];
         }
 
         return redirect('musim')->with($ses);
@@ -80,13 +80,13 @@ class MusimController extends Controller
             $update = Musim::where('musim_id', $id)->update($arr);
             
             if($update > 0){
-                $ses = ['success' => 'Data saved successfully'];
+                $ses = ['success' => 'Data berhasil di simpan'];
             } else {
-                $ses = ['fail' => 'Data failed to save'];
+                $ses = ['fail' => 'Data gagal di simpan'];
             }
         } else {
             // exist
-            $ses = ['fail' => 'Data already exist'];
+            $ses = ['fail' => 'Data sudah ada'];
         }
 
         return redirect('musim')->with($ses);

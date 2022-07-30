@@ -50,7 +50,7 @@
             <a href="{{ url('user') }}" class="nav-link {{ Request::is('user*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users-cog"></i>
               <p>
-                User Control
+                Kontrol Pengguna
               </p>
             </a>
           </li>
@@ -59,7 +59,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-database"></i>
               <p>
-                Master Data
+                Data Master
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -67,7 +67,7 @@
               <li class="nav-item">
                 <a href="{{ url('team') }}" class="nav-link {{ Request::is('team*') ? 'active' : '' }}">
                   <i class="nav-icon fas fa-shield-alt"></i>
-                  <p>Team</p>
+                  <p>Tim</p>
                 </a>
               </li>
               <li class="nav-item">
