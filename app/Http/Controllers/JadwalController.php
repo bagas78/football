@@ -8,13 +8,13 @@ use App\Models\Jadwal;
 use App\Models\Musim;
 use App\Models\Current;
 use App\Models\Skor;
-use Hash; 
+use Hash;  
 use Session;
 use DB;
 
 class JadwalController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         
         if (Session::get('login') == 1) {
             
@@ -22,8 +22,15 @@ class JadwalController extends Controller
             $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();
             $data['pekan_data'] = DB::select("SELECT CAST(jadwal_pekan AS INT) AS pekan FROM jadwal GROUP BY pekan ASC");
 
-            $data['data'] = Jadwal::join('musim', 'musim.musim_id', '=', 'jadwal.jadwal_musim')->where('jadwal_delete', 0)->where('jadwal_pekan',1)->orderBy('jadwal_status','ASC')->get();
+            $musim = $request->musim;
+            $pekan = $request->pekan;
 
+            if (@$musim) {
+                $data['data'] = Jadwal::join('musim', 'musim.musim_id', '=', 'jadwal.jadwal_musim')->where('jadwal_delete', 0)->where('jadwal_pekan',$pekan)->where('jadwal_musim',$musim)->orderBy('jadwal_status','ASC')->get();
+            } else {
+                $data['data'] = Jadwal::join('musim', 'musim.musim_id', '=', 'jadwal.jadwal_musim')->where('jadwal_delete', 0)->where('jadwal_pekan',1)->orderBy('jadwal_status','ASC')->get();
+            }
+            
             return view('jadwal/index',$data);
 
         } else { 
@@ -255,6 +262,7 @@ class JadwalController extends Controller
         $jadwal = $request->jadwal;
         $skor_a = $request->skor_a;
         $skor_b = $request->skor_b;
+        $musim = $request->musim;
 
         //menang - seri - kalah
 
@@ -287,6 +295,7 @@ class JadwalController extends Controller
         $a->skor_nilai = $skor_a;
         $a->skor_poin = $poin_a;
         $a->skor_bobol = $skor_b;
+        $a->skor_musim = $musim;
         $a->save();
 
         //team b
@@ -296,6 +305,7 @@ class JadwalController extends Controller
         $b->skor_nilai = $skor_b;
         $b->skor_poin = $poin_b;
         $b->skor_bobol = $skor_a;
+        $b->skor_musim = $musim;
         $b->save();
 
         //ubah status

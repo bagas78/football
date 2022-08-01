@@ -21,12 +21,9 @@ class DashboardController extends Controller
             $data['akan_num'] = Jadwal::where('jadwal_delete', 0)->where('jadwal_status', 0)->count();
             $data['selesai_num'] = Jadwal::where('jadwal_delete', 0)->where('jadwal_status', 1)->count();
 
-            $data['data'] = DB::select("SELECT *, SUM(a.skor_nilai) AS poin FROM skor as a JOIN team as b ON a.skor_team = b.team_id GROUP BY a.skor_team");
+            $data['data'] = DB::select("SELECT SUM(skor_nilai) AS poin, skor_team as team FROM skor WHERE skor_delete = 0 GROUP BY skor_team ORDER BY poin DESC");
 
-            echo '<pre>';
-            print_r($data['data']);
-
-            //return view('dashboard/index',$data);
+            return view('dashboard/index',$data);
 
         } else {
             

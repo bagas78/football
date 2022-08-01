@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('skor', function (Blueprint $table) {
             $table->id('skor_id');
             $table->string('skor_jadwal');
+            $table->string('skor_musim');
             $table->string('skor_team');
             $table->string('skor_nilai');
             $table->string('skor_poin');

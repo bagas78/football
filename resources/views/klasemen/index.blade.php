@@ -8,24 +8,30 @@
 <section class="content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
+      <div class="col-12"> 
         <div class="card">
 
               <!-- /.card-header -->
               <div class="card-body">
 
-                <div class="row">
-                  <div class="col-md-11 col-xs-11">
-                   <select name="musim" class="form-control" required="">
-                      @foreach($musim_data as $key)
-                        <option value="{{ $key->musim_id }}">{{ $key->musim_tahun }}</option>
-                      @endforeach
-                    </select>
+                <form method="post" action="{{ url('klasemen') }}">
+                  
+                  @csrf
+
+                  <div class="row">
+                    <div class="col-md-11 col-xs-11">
+                     <select name="musim" class="form-control" required="">
+                        @foreach($musim_data as $key)
+                          <option value="{{ $key->musim_id }}">{{ $key->musim_tahun }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="col-md-1 col-xs-1">
+                      <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
                   </div>
-                  <div class="col-md-1 col-xs-1">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
+
+                </form>
 
                 <br/>
 
@@ -49,16 +55,14 @@
 
                     @php
                       $id_team = $t->team_id;
-                      $jumlah = DB::select("SELECT COUNT(skor_team) AS jum, skor_team AS tim FROM skor WHERE skor_team = $id_team GROUP BY skor_team");
-                      $menang = DB::select("SELECT COUNT(skor_poin) AS menang FROM skor WHERE skor_team = $id_team AND skor_poin = 3");
-                      $kalah = DB::select("SELECT SUM(skor_poin) AS kalah FROM skor WHERE skor_team = $id_team AND skor_poin = 0");
-                      $seri = DB::select("SELECT SUM(skor_poin) AS seri FROM skor WHERE skor_team = $id_team AND skor_poin = 1");
-                      $gol = DB::select("SELECT SUM(skor_nilai) AS gol FROM skor WHERE skor_team = $id_team");
-                      $bobol = DB::select("SELECT SUM(skor_bobol) AS bobol FROM skor WHERE skor_team = $id_team");
-                      $poin = DB::select("SELECT SUM(skor_poin) AS poin FROM skor WHERE skor_team = $id_team AND skor_poin = 3");
+                      $jumlah = DB::select("SELECT COUNT(skor_team) AS jum, skor_team AS tim FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id GROUP BY skor_team");
+                      $menang = DB::select("SELECT COUNT(skor_poin) AS menang FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 3");
+                      $kalah = DB::select("SELECT SUM(skor_poin) AS kalah FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 0");
+                      $seri = DB::select("SELECT SUM(skor_poin) AS seri FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 1");
+                      $gol = DB::select("SELECT SUM(skor_nilai) AS gol FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id");
+                      $bobol = DB::select("SELECT SUM(skor_bobol) AS bobol FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id");
+                      $poin = DB::select("SELECT SUM(skor_poin) AS poin FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin IN(3,1)");
 
-                      // echo '<pre>';
-                      // print_r();
                     @endphp
 					    
   					         <tr>

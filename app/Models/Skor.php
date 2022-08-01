@@ -13,6 +13,7 @@ class Skor extends Model
 
     protected $fillable = [
         'skor_team',
+        'skor_musim',
         'skor_jadwal',
         'skor_nilai',
         'skor_poin',

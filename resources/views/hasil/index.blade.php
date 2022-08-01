@@ -33,7 +33,9 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
               <!-- /.card-header -->
               <div class="card-body">
 
-                <form method="post" action="{{ url('jadwal/filter') }}"> 
+                <form method="post" action="{{ url('hasil') }}"> 
+
+                @csrf
 
                 <div class="row">
                   <div class="col-md-5 col-xs-5">

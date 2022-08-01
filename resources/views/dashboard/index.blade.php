@@ -101,9 +101,24 @@
     
     var areaChartData = {
       labels  : [
+                  @php
+                    $i = 0;
+                  @endphp
+
                   @foreach ($data as $key)
                     
-                    '{{ $key->nama }}', 
+                    @php 
+
+                    $id_team = $key->team;
+                    $db = DB::select("SELECT * FROM team WHERE $id_team"); 
+                    
+                    @endphp
+
+                    '{{ $db[$i]->team_name }}', 
+
+                    @php
+                    $i++;
+                    @endphp
 
                   @endforeach
                 ],

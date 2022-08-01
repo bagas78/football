@@ -11,7 +11,7 @@ use App\Http\Controllers\MusimController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HasilController;
 use App\Http\Controllers\KlasemenController;
-
+ 
 /* 
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,14 +54,14 @@ Route::get('musim/delete/{id}', [MusimController::class, 'delete']);
 Route::post('musim/update', [MusimController::class, 'update']);
 
 //jadwal
-Route::get('jadwal', [JadwalController::class, 'index']);
+Route::match(array('GET','POST'),'jadwal', [JadwalController::class, 'index']);
 Route::post('jadwal/insert', [JadwalController::class, 'insert']);
 Route::get('jadwal/delete/{id}', [JadwalController::class, 'delete']);
 Route::post('jadwal/update', [JadwalController::class, 'update']);
 Route::post('jadwal/skor', [JadwalController::class, 'skor']);
 
 //hasil
-Route::get('hasil', [HasilController::class, 'index']);
+Route::match(array('GET','POST'),'hasil', [HasilController::class, 'index']);
 
 //klasemen
-Route::get('klasemen', [KlasemenController::class, 'index']);
+Route::match(array('GET','POST'),'klasemen', [KlasemenController::class, 'index']);

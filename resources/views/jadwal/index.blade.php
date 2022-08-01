@@ -18,7 +18,7 @@
     padding: 1%;
   }
 </style>
-
+ 
 @php
 $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 @endphp
@@ -33,8 +33,10 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
               <!-- /.card-header -->
               <div class="card-body">
 
-                <form method="post" action="{{ url('jadwal/filter') }}"> 
+                <form method="post" action="{{ url('jadwal') }}"> 
 
+                @csrf
+                
                 <div class="row">
                   <div class="col-md-3">
                     <button id="btn-modal" type="button" data-toggle="modal" data-target="#modal-insert" class="btn btn-primary mb-3"><i class="fa fa-plus"></i> Tambah Data</button>
@@ -140,6 +142,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                             <input type="hidden" name="team_a" value="{{ $db[0]->team_id }}">
                             <input type="hidden" name="team_b" value="{{ $db[1]->team_id }}">
                             <input type="hidden" name="jadwal" value="{{ $key->jadwal_id }}">
+                            <input type="hidden" name="musim" value="{{ $key->jadwal_musim }}">
 
                         </div>
                         <div class="modal-footer justify-content-between">
