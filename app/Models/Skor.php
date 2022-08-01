@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jadwal extends Model
+class Skor extends Model
 {
     use HasFactory;
 
-    protected $table = "jadwal";
+    protected $table = "skor";
 
     protected $fillable = [
-        'jadwal_team',
-        'jadwal_pekan',
-        'jadwal_pertandingan',
-        'jadwal_musim',
-        'jadwal_status',
+        'skor_team',
+        'skor_jadwal',
+        'skor_nilai',
+        'skor_poin',
+        'skor_bobol',
     ];
 }

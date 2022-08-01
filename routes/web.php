@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MusimController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\HasilController;
+use App\Http\Controllers\KlasemenController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -56,3 +58,10 @@ Route::get('jadwal', [JadwalController::class, 'index']);
 Route::post('jadwal/insert', [JadwalController::class, 'insert']);
 Route::get('jadwal/delete/{id}', [JadwalController::class, 'delete']);
 Route::post('jadwal/update', [JadwalController::class, 'update']);
+Route::post('jadwal/skor', [JadwalController::class, 'skor']);
+
+//hasil
+Route::get('hasil', [HasilController::class, 'index']);
+
+//klasemen
+Route::get('klasemen', [KlasemenController::class, 'index']);

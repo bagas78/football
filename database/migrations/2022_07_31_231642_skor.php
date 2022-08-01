@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('team', function (Blueprint $table) {
-            $table->id('team_id');
-            $table->string('team_name');
-            $table->string('team_penanggung');
-            $table->string('team_logo');
-            $table->integer('team_delete')->default('0');
+        Schema::create('skor', function (Blueprint $table) {
+            $table->id('skor_id');
+            $table->string('skor_jadwal');
+            $table->string('skor_team');
+            $table->string('skor_nilai');
+            $table->string('skor_poin');
+            $table->string('skor_bobol');
+            $table->integer('skor_delete')->default('0');
             $table->timestamps();
         });
     }

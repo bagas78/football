@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('jadwal_pekan');
             $table->string('jadwal_pertandingan');
             $table->string('jadwal_musim');
+            $table->integer('jadwal_status')->default('0');
             $table->integer('jadwal_delete')->default('0');
             $table->timestamps();
         });

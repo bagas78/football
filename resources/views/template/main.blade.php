@@ -144,13 +144,13 @@
 <script type="text/javascript">
   function logout(){
     Swal.fire({
-      title: 'Are you sure?',
-      text: "Log out of the app",
+      title: 'Kamu yakin?',
+      text: "Keluar Aplikasi",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, right!'
+      confirmButtonText: 'Ya, lanjut!'
     }).then((result) => {
       if (result.isConfirmed) {
         window.location.href = '/logout';
@@ -160,13 +160,13 @@
 
   function del(url){
     Swal.fire({
-      title: 'Are you sure?',
-      text: "Delete data",
+      title: 'Kamu yakin?',
+      text: "Hapus data",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, right!'
+      confirmButtonText: 'Ya, lanjut!'
     }).then((result) => {
       if (result.isConfirmed) {
         window.location.href = url;

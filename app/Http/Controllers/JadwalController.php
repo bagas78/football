@@ -7,7 +7,8 @@ use App\Models\Team;
 use App\Models\Jadwal;
 use App\Models\Musim;
 use App\Models\Current;
-use Hash;
+use App\Models\Skor;
+use Hash; 
 use Session;
 use DB;
 
@@ -18,8 +19,11 @@ class JadwalController extends Controller
         if (Session::get('login') == 1) {
             
             $data['title'] = 'Jadwal Pertandingan';
-            $data['data'] = Jadwal::where('jadwal_delete', 0)->get();
             $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();
+            $data['pekan_data'] = DB::select("SELECT CAST(jadwal_pekan AS INT) AS pekan FROM jadwal GROUP BY pekan ASC");
+
+            $data['data'] = Jadwal::join('musim', 'musim.musim_id', '=', 'jadwal.jadwal_musim')->where('jadwal_delete', 0)->where('jadwal_pekan',1)->orderBy('jadwal_status','ASC')->get();
+
             return view('jadwal/index',$data);
 
         } else { 
@@ -232,5 +236,77 @@ class JadwalController extends Controller
 
         return redirect('jadwal')->with($ses);
 
+    }
+
+    public function delete($id){
+        $update = Jadwal::where('jadwal_id', $id)->update(['jadwal_delete' => 1]);
+
+        if ($update > 0) {
+            $ses = ['success' => 'Data berhasil di simpan'];
+        } else {
+            $ses = ['fail' => 'Data gagal di simpan'];
+        }
+
+        return redirect('jadwal')->with($ses);
+        
+    }
+    public function skor(Request $request){
+        
+        $jadwal = $request->jadwal;
+        $skor_a = $request->skor_a;
+        $skor_b = $request->skor_b;
+
+        //menang - seri - kalah
+
+        if ($skor_a > $skor_b) {
+            // menang a
+            $poin_a = 3;
+        }else{
+            // kalah a
+            $poin_a = 0;
+        }
+
+        if ($skor_b > $skor_a) {
+            // menang b
+            $poin_b = 3;
+        }else{
+            // kalah a
+            $poin_b = 0;
+        }
+
+        if ($skor_b == $skor_a) {
+            //seri
+            $poin_a = 1;
+            $poin_b = 1;
+        }
+
+        //team a
+        $a = new Skor;
+        $a->skor_jadwal = $jadwal;
+        $a->skor_team = $request->team_a;
+        $a->skor_nilai = $skor_a;
+        $a->skor_poin = $poin_a;
+        $a->skor_bobol = $skor_b;
+        $a->save();
+
+        //team b
+        $b = new Skor;
+        $b->skor_jadwal = $jadwal;
+        $b->skor_team = $request->team_b;
+        $b->skor_nilai = $skor_b;
+        $b->skor_poin = $poin_b;
+        $b->skor_bobol = $skor_a;
+        $b->save();
+
+        //ubah status
+        $update = Jadwal::where('jadwal_id', $jadwal)->update(['jadwal_status' => 1]);
+
+        if ($update > 0) {
+            $ses = ['success' => 'Data berhasil di simpan'];
+        } else {
+            $ses = ['fail' => 'Data gagal di simpan'];
+        }
+
+        return redirect('jadwal')->with($ses);
     }
 }

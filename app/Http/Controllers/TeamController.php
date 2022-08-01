@@ -28,6 +28,7 @@ class TeamController extends Controller
 
         //variable
         $name = $request->name;
+        $penanggung = $request->penanggung;
         $logo = $request->file('logo');
         $tmp = $_FILES['logo']['tmp_name'];
         $path = 'img/team/';
@@ -50,6 +51,7 @@ class TeamController extends Controller
                 //save database
                 $team = new Team;
                 $team->team_name = $name;
+                $team->team_penanggung = $penanggung;
                 $team->team_logo = $new_name;
                 $team->save();
 
@@ -81,19 +83,22 @@ class TeamController extends Controller
 
         //variable
         $name = $request->name;
+        $penanggung = $request->penanggung;
         $id = $request->id;
-        $logo = $request->file('logo');
-        $path = 'img/team/';
-
-        //type
-        $ex = explode(".", $logo->getClientOriginalName());
-        $format = end($ex);
-
-        //filter
-        $fil = ['jpg','gif','png','jpeg'];
 
         if (@$logo) {
             // logo
+
+            $logo = $request->file('logo');
+            $path = 'img/team/';
+
+            //type
+            $ex = explode(".", $logo->getClientOriginalName());
+            $format = end($ex);
+
+            //filter
+            $fil = ['jpg','gif','png','jpeg'];
+        
             if (in_array($format, $fil)) {
                 
                 $db = Team::where('team_id', $id)->first();
@@ -105,6 +110,7 @@ class TeamController extends Controller
 
                     $set = [
                             'team_name' => $name,
+                            'team_penanggung' => $penanggung,
                             'team_logo' => $new_name,
                             ];
 
@@ -123,7 +129,7 @@ class TeamController extends Controller
 
         } else {
             // no logo
-            $update = Team::where('team_id', $id)->update(['team_name' => $name]);
+            $update = Team::where('team_id', $id)->update(['team_name' => $name, 'team_penanggung' => $penanggung]);
             if ($update > 0) {
                 $ses = ['success' => 'Data berhasil di simpan'];
             } else {
