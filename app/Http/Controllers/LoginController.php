@@ -31,6 +31,7 @@ class LoginController extends Controller
                                 'login' => 1,
                                 'user_name' => $user->user_name,
                                 'user_email' => $user->user_email, 
+                                'user_level' => $user->user_level, 
                             );
 
                 Session::put($sess);

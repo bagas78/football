@@ -46,6 +46,8 @@
             </a>
           </li>
 
+          @if(Session::get('user_level') == 1)
+
           <li class="nav-item">
             <a href="{{ url('user') }}" class="nav-link {{ Request::is('user*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users-cog"></i>
@@ -78,6 +80,8 @@
               </li>
             </ul>
           </li>
+
+          @endif
 
           <li class="nav-item has-treeview {{ Request::is('jadwal*') || Request::is('hasil*') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">

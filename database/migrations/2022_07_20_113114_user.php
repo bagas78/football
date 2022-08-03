@@ -16,6 +16,7 @@ return new class extends Migration
        Schema::create('user', function (Blueprint $table) {
             $table->id('user_id');
             $table->string('user_name');
+            $table->string('user_level');
             $table->string('user_email')->unique();
             $table->text('user_password');
             $table->integer('user_delete')->default('0');

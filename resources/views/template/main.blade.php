@@ -28,6 +28,10 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <!-- jQuery -->
+  <script src="adminlte/plugins/jquery/jquery.min.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -96,8 +100,6 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="adminlte/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -139,6 +141,9 @@
 <script src="adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
+<!-- ChartJS -->
+<script src="adminlte/plugins/chart.js/Chart.min.js"></script>
+
 </body>
 </html>
 
@@ -163,6 +168,22 @@
     Swal.fire({
       title: 'Kamu yakin?',
       text: "Hapus data",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, lanjut!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = url;
+      }
+    })
+  }
+
+  function swit(url){
+    Swal.fire({
+      title: 'Kamu yakin?',
+      text: "Ubah status",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

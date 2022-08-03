@@ -11,6 +11,7 @@ use App\Http\Controllers\MusimController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HasilController;
 use App\Http\Controllers\KlasemenController;
+use App\Http\Controllers\LandingController;
  
 /* 
 |--------------------------------------------------------------------------
@@ -23,9 +24,11 @@ use App\Http\Controllers\KlasemenController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//landing page
+Route::get('/', [LandingController::class, 'index']);
+Route::match(array('GET','POST'),'landing/jadwal', [LandingController::class, 'jadwal']);
+Route::match(array('GET','POST'),'landing/hasil', [LandingController::class, 'hasil']);
+Route::match(array('GET','POST'),'landing/klasemen', [LandingController::class, 'klasemen']);
 
 //login
 Route::get('login', [LoginController::class, 'index']);
@@ -52,6 +55,7 @@ Route::get('musim', [MusimController::class, 'index']);
 Route::post('musim/insert', [MusimController::class, 'insert']);
 Route::get('musim/delete/{id}', [MusimController::class, 'delete']);
 Route::post('musim/update', [MusimController::class, 'update']);
+Route::get('musim/switch/{id}', [MusimController::class, 'switch']);
 
 //jadwal
 Route::match(array('GET','POST'),'jadwal', [JadwalController::class, 'index']);

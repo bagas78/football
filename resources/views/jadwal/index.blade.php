@@ -12,7 +12,7 @@
     padding: 1%;
   }
   .status-success{
-    background: mediumturquoise;
+    background: mediumturquoise; 
     color: white;
     max-width: fit-content;
     padding: 1%;
@@ -127,7 +127,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                           </button>
                         </div>
                         <div class="modal-body">
-                          <form id="form-add" method="post" action="{{ url('jadwal/skor') }}">
+                          <form method="post" action="{{ url('jadwal/skor') }}">
                             @csrf
                             <div class="form-group">
                               <label>{{ $db[0]->team_name }}</label>

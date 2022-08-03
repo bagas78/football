@@ -12,7 +12,7 @@
         <div class="card">
 
               <!-- /.card-header -->
-              <div class="card-body">
+              <div class="card-body"> 
 
               	<button data-toggle="modal" data-target="#modal-insert" class="btn btn-primary mb-3"><i class="fa fa-plus"></i> Tambah Data</button>
 
@@ -20,7 +20,8 @@
                   <thead>
                   <tr>
                     <th>Musim</th>
-                    <th width="50">Action</th>
+                    <th>Status</th>
+                    <th width="80">Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -29,7 +30,13 @@
 					    
   					         <tr>
   	                    <td>{{ $key->musim_tahun }}</td>
+                        <td>{!! ($key->musim_status == 1)?'<span style="background:green; color: white; padding: 1%;">Berjalan</span>':'<span style="background:red; color: white; padding: 1%;">Belum Berjalan</span>' !!}</td>
   	                    <td>
+
+                          @if($key->musim_status == 1)
+                          <button type="button" onclick="swit('musim/switch/{{ $key->musim_id }}')" class="btn btn-warning btn-xs"><i class="fa fa-power-off"></i></button>
+                          @endif
+
   	                    	<button data-toggle="modal" data-target="#modal-edit{{ $key->musim_id }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
   	                    	<button type="button" onclick="del('musim/delete/{{ $key->musim_id }}')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
   	                    </td>

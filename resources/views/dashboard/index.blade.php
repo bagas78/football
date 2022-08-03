@@ -3,10 +3,6 @@
 @extends('template.sidebar')
 
 @section('content')
-
-<link rel="stylesheet" href="adminlte/plugins/fontawesome-free/css/all.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="adminlte/dist/css/adminlte.min.css">
     
     <!-- Main content -->
     <section class="content">
@@ -84,17 +80,6 @@
       </div>
       <!-- /.card -->
     </section>
-
-<!-- jQuery -->
-<script src="adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="adminlte/plugins/chart.js/Chart.min.js"></script>
-<!-- AdminLTE App -->
-<script src="adminlte/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="adminlte/dist/js/demo.js"></script>
 
 <script>
   $(function () {

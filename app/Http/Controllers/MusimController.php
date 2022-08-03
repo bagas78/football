@@ -15,7 +15,7 @@ class MusimController extends Controller
         if (Session::get('login') == 1) {
             
             $data['title'] = 'Musim Liga';
-            $data['data'] =  Musim::select('musim_id','musim_tahun')->orderBy('musim_id', 'DESC')->where('musim_delete', 0)->get();
+            $data['data'] =  Musim::select('musim_id','musim_tahun','musim_status')->orderBy('musim_id', 'DESC')->where('musim_delete', 0)->get();
 
             return view('musim/index',$data);
 
@@ -36,6 +36,7 @@ class MusimController extends Controller
             // null
             $musim = new Musim;
             $musim->musim_tahun = $tahun;
+            $musim->musim_status = 0;
             
             if($musim->save()){
                 $ses = ['success' => 'Data berhasil di simpan'];
@@ -90,5 +91,26 @@ class MusimController extends Controller
         }
 
         return redirect('musim')->with($ses);
+    }
+    public function switch($id){
+
+        $cek = Musim::where('musim_id',$id)->first();
+
+        if ($cek['musim_status'] == 1) {
+            // nonaktif
+            $update = Musim::where('musim_id', $id)->update(['musim_status' => 0]);
+        } else {
+            // aktif
+            $update = Musim::where('musim_id', $id)->update(['musim_status' => 1]);
+        }
+
+        if ($update > 0) {
+            $ses = ['success' => 'Data berhasil di simpan'];
+        } else {
+            $ses = ['fail' => 'Data gagal di simpan'];
+        }
+
+        return redirect('musim')->with($ses);
+        
     }
 }

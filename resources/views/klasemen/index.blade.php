@@ -52,30 +52,18 @@
                   <tbody>
 
                   	@foreach ($team_data as $t)
-
-                    @php
-                      $id_team = $t->team_id;
-                      $jumlah = DB::select("SELECT COUNT(skor_team) AS jum, skor_team AS tim FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id GROUP BY skor_team");
-                      $menang = DB::select("SELECT COUNT(skor_poin) AS menang FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 3");
-                      $kalah = DB::select("SELECT SUM(skor_poin) AS kalah FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 0");
-                      $seri = DB::select("SELECT SUM(skor_poin) AS seri FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin = 1");
-                      $gol = DB::select("SELECT SUM(skor_nilai) AS gol FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id");
-                      $bobol = DB::select("SELECT SUM(skor_bobol) AS bobol FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id");
-                      $poin = DB::select("SELECT SUM(skor_poin) AS poin FROM skor WHERE skor_team = $id_team AND skor_musim = $musim_id AND skor_poin IN(3,1)");
-
-                    @endphp
 					    
   					         <tr>
-  	                    <td>{{ $t->team_name }}</td>
-                        <td>{{ @$jumlah[0]->jum ?? '0' }}</td>
-                        <td>{{ @$menang[0]->menang ?? '0' }}</td>
-                        <td>{{ @$seri[0]->seri ?? '0' }}</td>
-                        <td>{{ @$kalah[0]->kalah ?? '0' }}</td>
-                        <td>{{ @$gol[0]->gol ?? '0' }}</td>
-                        <td>{{ @$bobol[0]->bobol ?? '0' }}</td>
-                        <td>{{ @abs($gol[0]->gol - @$bobol[0]->bobol) ?? '0' }}</td>
-                        <td>{{ @$poin[0]->poin ?? '0' }}</td>
-  	                 </tr>
+                        <td>{{ $t->tim }}</td>
+                        <td>{{ $t->p ?? '0' }}</td>
+                        <td>{{ $t->m ?? '0' }}</td>
+                        <td>{{ $t->s ?? '0' }}</td>
+                        <td>{{ $t->k ?? '0' }}</td>
+                        <td>{{ $t->gm ?? '0' }}</td>
+                        <td>{{ $t->ga ?? '0' }}</td>
+                        <td>{{ @abs($t->gm - $t->ga) ?? '0' }}</td>
+                        <td>{{ $t->poin ?? '0' }}</td>
+                    </tr>
 
 					         @endforeach
                   

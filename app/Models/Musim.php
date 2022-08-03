@@ -12,5 +12,6 @@ class Musim extends Model
 
     protected $fillable = [
         'musim_tahun',
+        'musim_status',
     ];
 }

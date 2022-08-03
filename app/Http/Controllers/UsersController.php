@@ -14,7 +14,7 @@ class UsersController extends Controller
         if (Session::get('login') == 1) {
             
             $data['title'] = 'Kontrol Pengguna';
-            $data['data'] =  User::select('user_id','user_name','user_email')->orderBy('user_id', 'DESC')->where('user_delete', 0)->get();
+            $data['data'] =  User::select('user_id','user_name','user_email','user_level')->orderBy('user_id', 'DESC')->where('user_delete', 0)->get();
 
             return view('user/index',$data);
 
@@ -29,6 +29,7 @@ class UsersController extends Controller
         $email = $request->email;
         $password = $request->password;
         $name = $request->name;
+        $level = $request->level;
 
         //cek email exist
         $x = User::where('user_email',$email)->count();
@@ -38,6 +39,7 @@ class UsersController extends Controller
             $user = new User;
             $user->user_name = $name;
             $user->user_email = $email;
+            $user->user_level = $level;
             $user->user_password = bcrypt($password);
             
             if($user->save()){
@@ -71,6 +73,7 @@ class UsersController extends Controller
         $password = $request->password;
         $name = $request->name;
         $id = $request->id;
+        $level = $request->level;
 
         //cek email exist
         $x = User::where('user_email',$email)->where('user_id','!=',$id)->count();
@@ -82,12 +85,14 @@ class UsersController extends Controller
                 $arr = [
                         'user_name' => $name,
                         'user_email' => $email,
+                        'user_level' => $level,
                     ];
             } else {
                 // pass fill
                 $arr = [
                         'user_name' => $name,
                         'user_email' => $email,
+                        'user_level' => $level,
                         'user_password' => bcrypt($password)
                     ];
             }

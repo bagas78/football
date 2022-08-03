@@ -19,8 +19,9 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Name</th>
+                    <th>Name</th> 
                     <th>Email</th>
+                    <th>Level</th>
                     <th width="50">Action</th>
                   </tr>
                   </thead>
@@ -31,6 +32,7 @@
   					         <tr>
   	                    <td>{{ $key->user_name }}</td>
   	                    <td>{{ $key->user_email }}</td>
+                        <td>{{ ($key->user_level == '1')? 'Super Admin':'Admin' }}</td>
   	                    <td>
   	                    	<button data-toggle="modal" data-target="#modal-edit{{ $key->user_id }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
   	                    	<button type="button" onclick="del('user/delete/{{ $key->user_id }}')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
@@ -65,6 +67,17 @@
                                   <label>Password</label>
                                   <input type="password" name="password" class="form-control" placeholder="Uniq password" autocomplete="new-password">
                                   <small class="text-danger">* fill to change password</small>
+                                </div>
+                                <div class="form-group">
+                                  <label>Level</label>
+                                  <select id="level{{ $key->user_id }}" class="form-control" required="" name="level">
+                                    <option value="" hidden="">-- Pilih --</option>
+                                    <option value="1">Super Admin</option>
+                                    <option value="2">Admin</option>
+                                  </select>
+                                  <script type="text/javascript">
+                                    $('#level{{ $key->user_id }}').val('{{ $key->user_level }}').change();
+                                  </script>
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -120,6 +133,14 @@
           <div class="form-group">
             <label>Password</label>
             <input type="password" name="password" class="form-control" required="" placeholder="Uniq password">
+          </div>
+          <div class="form-group">
+            <label>Level</label>
+            <select class="form-control" required="" name="level">
+              <option value="" hidden="">-- Pilih --</option>
+              <option value="1">Super Admin</option>
+              <option value="2">Admin</option>
+            </select>
           </div>
       </div>
       <div class="modal-footer justify-content-between">

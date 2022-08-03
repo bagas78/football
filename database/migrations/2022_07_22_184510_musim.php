@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('musim', function (Blueprint $table) {
             $table->id('musim_id');
             $table->string('musim_tahun');
+            $table->string('musim_status');
             $table->integer('musim_delete')->default('0');
             $table->timestamps();
         });

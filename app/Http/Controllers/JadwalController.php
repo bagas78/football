@@ -41,207 +41,221 @@ class JadwalController extends Controller
     }
     public function insert(Request $request){
 
-        //delete table
-        DB::table('current')->delete();  
-        DB::table('jadwal')->delete();  
-
         $team = Team::where('team_delete', 0)->get();
         $jadwal = Jadwal::where('jadwal_delete', 0)->get();
         $musim = $request->musim;
 
-        //team
-        $a = $team->count();
+        $status = Musim::where('musim_id',$musim)->first();
+        
+        if ($status->musim_status == 0) {
+            // tidak active
 
-        //jadwal
-        $b = $jadwal->count();
+                //delete table
+                DB::table('current')->delete();  
+                DB::table('jadwal')->where('jadwal_musim',$musim)->delete();  
+                DB::select("UPDATE skor SET skor_delete = 1");
 
-        //jumlah loop
-        $r = $a * (($a-1) /2);
+                //team
+                $a = $team->count();
 
-        //pembagian
-        $i = $a - 1;
+                //jadwal
+                $b = $jadwal->count();
 
-        //pekan
-        $p = $r / $i;
+                //jumlah loop
+                $r = $a * (($a-1) /2);
 
-        $no = 1;
-        $arr = array();
-        foreach ($team->shuffle() as $key1) {
+                //pembagian
+                $i = $a - 1;
 
-            foreach ($team->shuffle() as $key2) {
-                
-                $left = $key1->team_id.','.$key2->team_id;
-                $right = $key2->team_id.','.$key1->team_id;
+                //pekan
+                $p = $r / $i;
 
-                if ($key1->team_id == $key2->team_id) {
-                    
-                    $position = $left;
-                } else {
-                    
-                    $position = $right;
-                }
+                $no = 1;
+                $arr = array();
+                foreach ($team->shuffle() as $key1) {
 
-                $cek = Jadwal::where('jadwal_musim', $musim)->where('jadwal_team', $left)->orWhere('jadwal_team', $right)->count();
+                    foreach ($team->shuffle() as $key2) {
+                        
+                        $left = $key1->team_id.','.$key2->team_id;
+                        $right = $key2->team_id.','.$key1->team_id;
 
-                if ($cek == 0 && $key1->team_id != $key2->team_id) {
-
-                   if ($no <= $r) {   
-
-                        $jadwal = new Jadwal;
-                        $jadwal->jadwal_team = $position;
-                        $jadwal->jadwal_pekan = '';
-                        $jadwal->jadwal_pertandingan = '';
-                        $jadwal->jadwal_musim = $request->musim;
-                        $jadwal->save();
-
-                        $no++;
-
-                        if ($no == $r) {
+                        if ($key1->team_id == $key2->team_id) {
                             
-                            $go = 1;
-                        }
-                   } 
-
-                }
-            }           
-        }
-
-        if (@$go == 1) {
-
-            $second = 1;
-
-            reloop:
-
-            for ($x=1; $x < $i+1; $x++) { 
-
-                foreach ($team->shuffle() as $t) {
-
-                    $t_id = $t['team_id'];
-                    $cek = DB::select("SELECT * FROM jadwal WHERE jadwal_delete = 0 AND jadwal_pekan = '' AND concat(',',jadwal_team,',') LIKE '%,$t_id,%' LIMIT 1");
-
-                    foreach ($cek as $c) {
-
-                        $cur = Current::where('current_pekan', $x)->get();
-
-                        //save current
-                        if ($cur->count() == 0) {
-                            // insert
-                            $current = new Current;
-                            $current->current_pekan = $x;
-                            $current->current_arr = $c->jadwal_team;
-                            $current->save();
-
+                            $position = $left;
                         } else {
-                            // update
-                            foreach ($cur as $cu) {
+                            
+                            $position = $right;
+                        }
+
+                        $cek = Jadwal::where('jadwal_musim', $musim)->where('jadwal_team', $left)->orWhere('jadwal_team', $right)->count();
+
+                        if ($cek == 0 && $key1->team_id != $key2->team_id) {
+
+                           if ($no <= $r) {   
+
+                                $jadwal = new Jadwal;
+                                $jadwal->jadwal_team = $position;
+                                $jadwal->jadwal_pekan = '';
+                                $jadwal->jadwal_pertandingan = '';
+                                $jadwal->jadwal_musim = $request->musim;
+                                $jadwal->save();
+
+                                $no++;
+
+                                if ($no == $r) {
+                                    
+                                    $go = 1;
+                                }
+                           } 
+
+                        }
+                    }           
+                }
+
+                if (@$go == 1) {
+
+                    $second = 1;
+
+                    reloop:
+
+                    for ($x=1; $x < $i+1; $x++) { 
+
+                        foreach ($team->shuffle() as $t) {
+
+                            $t_id = $t['team_id'];
+                            $cek = DB::select("SELECT * FROM jadwal WHERE jadwal_delete = 0 AND jadwal_pekan = '' AND concat(',',jadwal_team,',') LIKE '%,$t_id,%' LIMIT 1");
+
+                            foreach ($cek as $c) {
+
+                                $cur = Current::where('current_pekan', $x)->get();
+
+                                //save current
+                                if ($cur->count() == 0) {
+                                    // insert
+                                    $current = new Current;
+                                    $current->current_pekan = $x;
+                                    $current->current_arr = $c->jadwal_team;
+                                    $current->save();
+
+                                } else {
+                                    // update
+                                    foreach ($cur as $cu) {
+                                        
+                                        $uniq = array_unique(array_merge(explode(',', $cu->current_arr),explode(',', $c->jadwal_team)));
+
+                                        $update = Current::where('current_pekan', $x)->update(['current_arr'=> implode(',', $uniq)]);
+                                    }
+                                }
+
+                                $m = explode(',', $c->jadwal_team);
+                                $n = explode(',', @$cur[0]->current_arr);
+
+                                $num = 0;
+                                foreach ($m as $key => $value) {
+                                   $num += in_array($value, $n);
+                                }
+
+                                if ($num == 0) {
+                                    
+                                    $j_id = $c->jadwal_id;
+                                    
+                                    if (Jadwal::where('jadwal_pekan', $x)->count() < $p) {
+
+                                        //tanggal
+                                        $day = $x * 7;
+                                        $date = $request->tanggal;
+                                        $date = strtotime($date);
+                                        $date = strtotime("+{$day} day", $date);
+                                        $final_date = date('Y-m-d', $date);
+
+                                        $update = Jadwal::where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x, 'jadwal_pertandingan' => $final_date]);
+                                    }
+                                }
                                 
-                                $uniq = array_unique(array_merge(explode(',', $cu->current_arr),explode(',', $c->jadwal_team)));
-
-                                $update = Current::where('current_pekan', $x)->update(['current_arr'=> implode(',', $uniq)]);
                             }
-                        }
 
-                        $m = explode(',', $c->jadwal_team);
-                        $n = explode(',', @$cur[0]->current_arr);
+                        }  
 
-                        $num = 0;
-                        foreach ($m as $key => $value) {
-                           $num += in_array($value, $n);
-                        }
-
-                        if ($num == 0) {
-                            
-                            $j_id = $c->jadwal_id;
-                            
-                            if (Jadwal::where('jadwal_pekan', $x)->count() < $p) {
-
-                                //tanggal
-                                $day = $x * 7;
-                                $date = $request->tanggal;
-                                $date = strtotime($date);
-                                $date = strtotime("+{$day} day", $date);
-                                $final_date = date('Y-m-d', $date);
-
-                                $update = Jadwal::where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x, 'jadwal_pertandingan' => $final_date]);
+                        //hapus belum di pakai
+                        $cr = '';
+                        foreach (Jadwal::where('jadwal_pekan',$x)->get() as $key) {
+                            if ($x == $key->jadwal_pekan) {
+                                
+                                $cr .= $key->jadwal_team.' ';
                             }
-                        }
-                        
+                        }    
+
+                       $arr_jad = explode(',', substr(str_replace(' ', ',', $cr), 0, -1));      
+
+                       foreach (Current::where('current_pekan',$x)->get() as $cc) {
+                           
+                           if ($cc->current_pekan == $x) {
+                                
+                                $ls = array_diff(explode(',', $cc->current_arr), $arr_jad);
+                                $final = implode(',', array_diff(explode(',', $cc->current_arr), $ls));
+
+                                $update = Current::where('current_pekan', $x)->update(['current_arr' => $final]);
+                           }
+                       }
                     }
 
-                }  
 
-                //hapus belum di pakai
-                $cr = '';
-                foreach (Jadwal::where('jadwal_pekan',$x)->get() as $key) {
-                    if ($x == $key->jadwal_pekan) {
-                        
-                        $cr .= $key->jadwal_team.' ';
-                    }
-                }    
+                   $second++;
 
-               $arr_jad = explode(',', substr(str_replace(' ', ',', $cr), 0, -1));      
+                   //eksekusi 30x
+                   if ($second != 30) {
 
-               foreach (Current::where('current_pekan',$x)->get() as $cc) {
-                   
-                   if ($cc->current_pekan == $x) {
-                        
-                        $ls = array_diff(explode(',', $cc->current_arr), $arr_jad);
-                        $final = implode(',', array_diff(explode(',', $cc->current_arr), $ls));
+                        goto reloop;
 
-                        $update = Current::where('current_pekan', $x)->update(['current_arr' => $final]);
+                   } else {
+
+                        if (Jadwal::where('jadwal_pekan','')->count() > 0) {
+                            
+                            //ada yang kosong
+                            $xx = DB::select("SELECT jadwal_pekan AS pekan,COUNT(jadwal_pekan) AS jum FROM jadwal WHERE jadwal_pekan != '' GROUP BY jadwal_pekan");
+
+                            foreach ($xx as $key) {
+                                
+                                if ($key->jum <= $p) {
+                                    
+                                    for ($i=0; $i < $p - $key->jum; $i++) { 
+
+                                        //tanggal
+                                        $day = $key->pekan * 7;
+                                        $date = $request->tanggal;
+                                        $date = strtotime($date);
+                                        $date = strtotime("+{$day} day", $date);
+                                        $final_date = date('Y-m-d', $date);
+                                        
+                                        Jadwal::where('jadwal_pekan', '')->take(1)->update(['jadwal_pekan' => $key->pekan, 'jadwal_pertandingan' => $final_date]); 
+                                    }
+                                }
+                            }
+
+                        } 
                    }
-               }
-            }
 
+                }
 
-           $second++;
-
-           //eksekusi 30x
-           if ($second != 30) {
-
-                goto reloop;
-
-           } else {
 
                 if (Jadwal::where('jadwal_pekan','')->count() > 0) {
                     
-                    //ada yang kosong
-                    $xx = DB::select("SELECT jadwal_pekan AS pekan,COUNT(jadwal_pekan) AS jum FROM jadwal WHERE jadwal_pekan != '' GROUP BY jadwal_pekan");
+                    $ses = ['fail' => 'Data ada yang gagal di simpan'];
+                } else {
 
-                    foreach ($xx as $key) {
-                        
-                        if ($key->jum <= $p) {
-                            
-                            for ($i=0; $i < $p - $key->jum; $i++) { 
+                    //update status musim
+                    Musim::where('musim_id', $musim)->update(['musim_status' => 1]);
+                    
+                    $ses = ['success' => 'Data berhasil di simpan'];
+                }
+                
+                return redirect('jadwal')->with($ses);
 
-                                //tanggal
-                                $day = $key->pekan * 7;
-                                $date = $request->tanggal;
-                                $date = strtotime($date);
-                                $date = strtotime("+{$day} day", $date);
-                                $final_date = date('Y-m-d', $date);
-                                
-                                Jadwal::where('jadwal_pekan', '')->take(1)->update(['jadwal_pekan' => $key->pekan, 'jadwal_pertandingan' => $final_date]); 
-                            }
-                        }
-                    }
+            } else {
 
-                } 
-           }
-
+            // active
+            return redirect('jadwal')->with(['fail' => 'Musim masih berjalan, masuk ke menu MUSIM LIGA untuk menggantikan status']);
         }
-
-
-        if (Jadwal::where('jadwal_pekan','')->count() > 0) {
-            
-            $ses = ['fail' => 'Data ada yang gagal di simpan'];
-        } else {
-            
-            $ses = ['success' => 'Data berhasil di simpan'];
-        }
-        
-
-        return redirect('jadwal')->with($ses);
 
     }
 
