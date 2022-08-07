@@ -47,7 +47,7 @@ class JadwalController extends Controller
 
         $status = Musim::where('musim_id',$musim)->first();
         
-        if ($status->musim_status == 0) {
+        if ($status->musim_status == 0 && $team->count() >= 5) {
             // tidak active
 
                 //delete table
@@ -254,7 +254,7 @@ class JadwalController extends Controller
             } else {
 
             // active
-            return redirect('jadwal')->with(['fail' => 'Musim masih berjalan, masuk ke menu MUSIM LIGA untuk menggantikan status']);
+            return redirect('jadwal')->with(['fail' => 'Team kurang dari 5 / Musim masih berjalan, masuk ke menu MUSIM LIGA untuk menggantikan status']);
         }
 
     }

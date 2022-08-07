@@ -15,7 +15,7 @@
     <title>Liga Topskor Indonesia</title>
 
     <style>
-        body {
+        body { 
             background-color: rgb(229, 229, 229);
         }
 
@@ -40,6 +40,7 @@
             <a class="nav-link {{ Request::is('landing/jadwal*') ? 'active' : '' }}" href="{{ url('landing/jadwal') }}">Jadwal Pertandingan</a>
             <a class="nav-link {{ Request::is('landing/hasil*') ? 'active' : '' }}" href="{{ url('landing/hasil') }}">Hasil Pertandingan</a>
             <a class="nav-link {{ Request::is('landing/klasemen*') ? 'active' : '' }}" href="{{ url('landing/klasemen') }}">Klasemen</a>
+            <a class="nav-link {{ Request::is('landing/histori*') ? 'active' : '' }}" href="{{ url('landing/histori') }}">Histori</a>
             </div>
         </div>
     </nav>

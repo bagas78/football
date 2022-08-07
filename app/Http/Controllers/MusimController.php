@@ -21,7 +21,7 @@ class MusimController extends Controller
 
         } else {
             
-            return redirect('/login');
+            return redirect('/login'); 
         }
     }
     public function insert(Request $request){
@@ -51,12 +51,22 @@ class MusimController extends Controller
         return redirect('musim')->with($ses);
     }
     public function delete($id){
-        $update = Musim::where('musim_id', $id)->update(['musim_delete' => 1]);
 
-        if ($update > 0) {
-            $ses = ['success' => 'Data berhasil di simpan'];
+        $cek = Musim::where('musim_id',$id)->where('musim_status','=',1)->count();
+
+        if ($cek == 0) {
+
+            $update = Musim::where('musim_id', $id)->update(['musim_delete' => 1]);
+
+            if ($update > 0) {
+                $ses = ['success' => 'Data berhasil di simpan'];
+            } else {
+                $ses = ['fail' => 'Data gagal di simpan'];
+            }
+
         } else {
-            $ses = ['fail' => 'Data gagal di simpan'];
+           
+           $ses = ['fail' => 'Musim sedang aktif'];
         }
 
         return redirect('musim')->with($ses);
@@ -68,26 +78,35 @@ class MusimController extends Controller
         $tahun = $request->awal.'-'.$request->akhir;
         $id = $request->id;
 
-        //cek musim exist
-        $x = Musim::where('musim_tahun',$tahun)->where('musim_id','!=',$id)->count();
+        $cek = Musim::where('musim_id',$id)->where('musim_status','=',1)->count();
 
-        if ($x == 0) {
-            
-            $arr = [
-                        'musim_tahun' => $tahun
-                    ];
-          
+        if ($cek == 0) {
 
-            $update = Musim::where('musim_id', $id)->update($arr);
-            
-            if($update > 0){
-                $ses = ['success' => 'Data berhasil di simpan'];
+            //cek musim exist
+            $x = Musim::where('musim_tahun',$tahun)->where('musim_id','!=',$id)->count();
+
+            if ($x == 0) {
+                
+                $arr = [
+                            'musim_tahun' => $tahun
+                        ];
+              
+
+                $update = Musim::where('musim_id', $id)->update($arr);
+                
+                if($update > 0){
+                    $ses = ['success' => 'Data berhasil di simpan'];
+                } else {
+                    $ses = ['fail' => 'Data gagal di simpan'];
+                }
             } else {
-                $ses = ['fail' => 'Data gagal di simpan'];
+                // exist
+                $ses = ['fail' => 'Data sudah ada'];
             }
+            
         } else {
-            // exist
-            $ses = ['fail' => 'Data sudah ada'];
+           
+           $ses = ['fail' => 'Musim sedang aktif'];
         }
 
         return redirect('musim')->with($ses);

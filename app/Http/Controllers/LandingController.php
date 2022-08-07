@@ -15,7 +15,7 @@ class LandingController extends Controller
 
         $data['hasil_data'] = DB::select("SELECT * FROM jadwal AS a JOIN musim AS b ON a.jadwal_musim = b.musim_id WHERE a.jadwal_status = 1 ORDER BY a.jadwal_pekan + 0 ASC LIMIT 8");
 
-        $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id GROUP BY a.skor_team ORDER BY m DESC LIMIT 5");
+        $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_delete = 0 GROUP BY a.skor_team ORDER BY m DESC LIMIT 5");
 
         return view('landing/index',$data);
     }
@@ -56,14 +56,30 @@ class LandingController extends Controller
 
         if (@$musim) {
             
-            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_musim = $musim GROUP BY a.skor_team ORDER BY m DESC");
+            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_musim = $musim AND a.skor_delete = 0 GROUP BY a.skor_team ORDER BY m DESC");
         } else {
             
-            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id GROUP BY a.skor_team ORDER BY m DESC");
+            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_delete = 0 GROUP BY a.skor_team ORDER BY m DESC");
         }
 
         $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();
 
         return view('landing/klasemen',$data);
+    }
+    public function histori(Request $request){
+
+        $musim = $request->musim;
+
+        if (@$musim) {
+            
+            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_musim = $musim AND a.skor_delete = 1 GROUP BY a.skor_team ORDER BY m DESC");
+        } else {
+            
+            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_delete = 1 GROUP BY a.skor_team ORDER BY m DESC");
+        }
+
+        $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();
+
+        return view('landing/histori',$data);
     }
 }

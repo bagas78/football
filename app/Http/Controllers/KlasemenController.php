@@ -21,7 +21,7 @@ class KlasemenController extends Controller
             $data['title'] = 'Klasemen';
             $data['musim_data'] =  Musim::where('musim_delete', 0)->get();
 
-            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id GROUP BY a.skor_team ORDER BY m DESC");
+            $data['team_data'] =  DB::select("SELECT b.team_name as tim,COUNT(a.skor_team) AS p, COUNT(IF(a.skor_poin = 3, 1, NULL)) AS m, COUNT(IF(a.skor_poin = 1, 1, NULL)) AS s, COUNT(IF(a.skor_poin = 0, 1, NULL)) AS k, SUM(a.skor_nilai) AS gm, SUM(a.skor_bobol) AS ga, SUM(a.skor_poin) AS poin FROM skor AS a JOIN team AS b ON a.skor_team = b.team_id WHERE a.skor_delete = 0 GROUP BY a.skor_team ORDER BY m DESC");
 
             $musim = @$request->musim;
 
