@@ -32,7 +32,7 @@
   					         <tr>
   	                    <td>{{ $key->team_name }}</td>
                         <td>{{ $key->team_penanggung }}</td>
-  	                    <td><img width="50" src="{{ url('img/team/'.$key->team_logo) }}"></td>
+  	                    <td><img width="50" src="{{ asset('img/team/'.$key->team_logo) }}"></td>
   	                    <td>
   	                    	<button data-toggle="modal" data-target="#modal-edit{{ $key->team_id }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
   	                    	<button type="button" onclick="del('team/delete/{{ $key->team_id }}')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
@@ -74,7 +74,7 @@
                                       <span class="input-group-text">Upload</span>
                                     </div>
                                   </div>
-                                  <img width="100" class="img img-thumbnail mt-2" src="{{ url('img/team/'.$key->team_logo) }}">
+                                  <img width="100" class="img img-thumbnail mt-2" src="{{ asset('img/team/'.$key->team_logo) }}">
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-between">

@@ -85,7 +85,7 @@
 
                     <div class="row card-text">
                         <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[0]->team_logo) }}" height="50">
+                            <img src="{{ asset('img/team/'.$db[0]->team_logo) }}" height="50">
                             <p class="font-weight-bold">{{ $db[0]->team_name }}</p>
                         </div>
 
@@ -102,7 +102,7 @@
                             <p>Pekan ke-{{ $h->jadwal_pekan }} Musim {{ $h->musim_tahun }}</p>
                         </div>
                         <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[1]->team_logo) }}" height="50">
+                            <img src="{{ asset('img/team/'.$db[1]->team_logo) }}" height="50">
                             <p class="font-weight-bold">{{ $db[1]->team_name }}</p>
                         </div>
                     </div>

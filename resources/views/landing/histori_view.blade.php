@@ -38,7 +38,7 @@
 
         <div class="card-header bg-white">
             <div class="form-group">
-                <form action="{{ url('landing/jadwal') }}" method="POST">
+                <form action="{{ url('landing/histori_view/'.$current) }}" method="POST">
 
                     @csrf 
                     
@@ -66,35 +66,44 @@
 
         <div class="card-body" id="content">
 
-            @foreach($jadwal_data as $j)
+            @foreach($hasil_data as $h)
 
-            @if( in_array($j->jadwal_pekan, $x) < 1)
-                <p style="background: #e9ecef;padding: 1%;" class="font-weight-bold">Pekan ke-{{ $j->jadwal_pekan }}</p>
+            @if( in_array($h->jadwal_pekan, $x) < 1)
+                <p style="background: #e9ecef;padding: 1%;" class="font-weight-bold">Pekan ke-{{ $h->jadwal_pekan }}</p>
                 <hr>
             @endif
 
             @php
-                $x[] += $j->jadwal_pekan;
-                $arr = implode(',', explode(',', $j->jadwal_team));
-                @$db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
+                $x[] += $h->jadwal_pekan;
+                $arr = implode(',', explode(',', $h->jadwal_team));
+                $db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
             @endphp
 
             <div class="card mb-3">
                 <div class="card-body">
-                    <p class="card-title font-weight-bold" style="font-size: 15px; margin-bottom: 15px;">{{ $hari[date('N', strtotime($j->jadwal_pertandingan)) - 1] }}, {{ date('d/m/Y', strtotime($j->jadwal_pertandingan)) }}</p>
+                    <p class="card-title font-weight-bold" style="font-size: 15px; margin-bottom: 15px;">{{ $hari[date('N', strtotime($h->jadwal_pertandingan)) - 1] }}, {{ date('d/m/Y', strtotime($h->jadwal_pertandingan)) }}</p>
 
                     <div class="row card-text">
                         <div class="col-md-4 text-center">
-                            <img src="{{ asset('img/team/'.@$db[0]->team_logo) }}" height="50">
-                            <p class="font-weight-bold">{{ @$db[0]->team_name }}</p>
+                            <img src="{{ asset('img/team/'.$db[0]->team_logo) }}" height="50">
+                            <p class="font-weight-bold">{{ $db[0]->team_name }}</p>
+                        </div>
+
+                        @php
+                            $s_a = $db[0]->team_id;
+                            $s_b = $db[1]->team_id;
+                            $jad = $h->jadwal_id;
+                            $skor_a = DB::select("SELECT * FROM skor WHERE skor_team = '$s_a' AND skor_jadwal = '$jad'");
+                            $skor_b = DB::select("SELECT * FROM skor WHERE skor_team = '$s_b' AND skor_jadwal = $jad");
+                        @endphp
+
+                        <div class="col-md-4 text-center">
+                            <b style="font-size: 18px">{{ @$skor_a[0]->skor_nilai ?? '-' }} vs {{ @$skor_b[0]->skor_nilai ?? '-' }}</b>
+                            <p>Pekan ke-{{ $h->jadwal_pekan }} Musim {{ $h->musim_tahun }}</p>
                         </div>
                         <div class="col-md-4 text-center">
-                            <b>VS</b>
-                            <p>Pekan ke-{{ $j->jadwal_pekan }} Musim {{ $j->musim_tahun }}</p>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <img src="{{ asset('img/team/'.@$db[1]->team_logo) }}" height="50">
-                            <p class="font-weight-bold">{{ @$db[1]->team_name }}</p>
+                            <img src="{{ asset('img/team/'.$db[1]->team_logo) }}" height="50">
+                            <p class="font-weight-bold">{{ $db[1]->team_name }}</p>
                         </div>
                     </div>
                 </div>

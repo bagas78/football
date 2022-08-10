@@ -88,7 +88,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                           @endphp
 
                           <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[0]->team_logo) }}" height="25">
+                            <img src="{{ asset('img/team/'.$db[0]->team_logo) }}" height="25">
                             <p class="text-bold">{{ $db[0]->team_name }}</p>
                           </div>
                           <div class="col-md-4 text-center">
@@ -96,7 +96,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                             <p style="font-size: 15px">Pekan ke-{{ $key->jadwal_pekan }} Musim {{ $key->musim_tahun }}</p>
                           </div>
                           <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[1]->team_logo) }}" height="25">
+                            <img src="{{ asset('img/team/'.$db[1]->team_logo) }}" height="25">
                             <p class="text-bold">{{ $db[1]->team_name }}</p>
                           </div>
 

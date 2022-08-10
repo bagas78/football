@@ -30,6 +30,7 @@ Route::match(array('GET','POST'),'landing/jadwal', [LandingController::class, 'j
 Route::match(array('GET','POST'),'landing/hasil', [LandingController::class, 'hasil']);
 Route::match(array('GET','POST'),'landing/klasemen', [LandingController::class, 'klasemen']);
 Route::match(array('GET','POST'),'landing/histori', [LandingController::class, 'histori']);
+Route::match(array('GET','POST'),'landing/histori_view/{id}', [LandingController::class, 'histori_view']);
 
 //login
 Route::get('login', [LoginController::class, 'index']);

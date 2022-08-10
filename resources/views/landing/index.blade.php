@@ -51,7 +51,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
                                 @php
                                     $arr = implode(',', explode(',', $j->jadwal_team));
-                                    $db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
+                                    @$db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
                                 @endphp
 
                                 <div class="owl-item active" style="width: 258px; margin-right: 10px;">
@@ -61,16 +61,16 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
                                             <div class="row card-text">
                                                 <div class="col-md-4 text-center">
-                                                    <img src="{{ url('img/team/'.$db[0]->team_logo) }}">
-                                                    <p class="font-weight-bold">{{ $db[0]->team_name }}</p>                       
+                                                    <img src="{{ asset('img/team/'.@$db[0]->team_logo) }}">
+                                                    <p class="font-weight-bold">{{ @$db[0]->team_name }}</p>                       
                                                 </div>
                                                 <div class="col-md-4 text-center">
                                                     <b>VS</b>
                                                     <p>Pekan ke-{{ $j->jadwal_pekan }} Musim {{ $j->musim_tahun }}</p>
                                                 </div>
                                                 <div class="col-md-4 text-center">
-                                                    <img src="{{ url('img/team/'.$db[1]->team_logo) }}">                                
-                                                    <p class="font-weight-bold">{{ $db[1]->team_name }}</p>
+                                                    <img src="{{ asset('img/team/'.@$db[1]->team_logo) }}">                                
+                                                    <p class="font-weight-bold">{{ @$db[1]->team_name }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,7 +98,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
                             @php
                                 $arr = implode(',', explode(',', $h->jadwal_team));
-                                $db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
+                                @$db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
                             @endphp
 
                             <div class="owl-item active" style="width: 258px; margin-right: 10px;">
@@ -108,13 +108,13 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
                                         <div class="row card-text">
                                             <div class="col-md-4 text-center">
-                                                <img src="{{ url('img/team/'.$db[0]->team_logo) }}">
-                                                <p class="font-weight-bold">{{ $db[0]->team_name }}</p>                       
+                                                <img src="{{ asset('img/team/'.@$db[0]->team_logo) }}">
+                                                <p class="font-weight-bold">{{ @$db[0]->team_name }}</p>                       
                                             </div>
 
                                             @php
-                                                $s_a = $db[0]->team_id;
-                                                $s_b = $db[1]->team_id;
+                                                $s_a = @$db[0]->team_id;
+                                                $s_b = @$db[1]->team_id;
                                                 $jad = $h->jadwal_id;
                                                 $skor_a = DB::select("SELECT * FROM skor WHERE skor_team = '$s_a' AND skor_jadwal = '$jad'");
                                                 $skor_b = DB::select("SELECT * FROM skor WHERE skor_team = '$s_b' AND skor_jadwal = $jad");
@@ -125,8 +125,8 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                                                 <p>Pekan ke-{{ $h->jadwal_pekan }} Musim {{ $h->musim_tahun }}</p>
                                             </div>
                                             <div class="col-md-4 text-center">
-                                                <img src="{{ url('img/team/'.$db[1]->team_logo) }}">                                
-                                                <p class="font-weight-bold">{{ $db[1]->team_name }}</p>
+                                                <img src="{{ asset('img/team/'.@$db[1]->team_logo) }}">                                
+                                                <p class="font-weight-bold">{{ @$db[1]->team_name }}</p>
                                             </div>
                                         </div>
                                     </div>

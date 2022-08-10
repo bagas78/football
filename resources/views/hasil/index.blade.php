@@ -79,7 +79,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                           @endphp
 
                           <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[0]->team_logo) }}" height="25">
+                            <img src="{{ asset('img/team/'.$db[0]->team_logo) }}" height="25">
                             <p class="text-bold">{{ $db[0]->team_name }}</p>
                           </div>
 
@@ -95,7 +95,7 @@ $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
                             <h4>{{ @$skor_a[0]->skor_nilai ?? '-' }} vs {{ @$skor_b[0]->skor_nilai ?? '-' }}</h4>
                           </div>
                           <div class="col-md-4 text-center">
-                            <img src="{{ url('img/team/'.$db[1]->team_logo) }}" height="25">
+                            <img src="{{ asset('img/team/'.$db[1]->team_logo) }}" height="25">
                             <p class="text-bold">{{ $db[1]->team_name }}</p>
                           </div>
 

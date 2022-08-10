@@ -36,58 +36,24 @@
 <div class="container-fluid mt-5">
     <div class="card mt-3">
 
-        <div class="card-header bg-white">
-            <div class="form-group">
-                <form action="{{ url('landing/histori') }}" method="POST">
-
-                    @csrf 
-                    
-                    <div class="row">
-                        <div class="col-md-11">
-                          <select class="form-control" name="musim">
-                            @foreach($musim_data as $m)
-                                <option value="{{ $m->musim_id }}">{{ $m->musim_tahun }}</option>
-                            @endforeach
-                          </select>  
-                        </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <div class="card-body">
             <div class="table-responsive">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Tim</th>
-                    <th>P</th>
-                    <th>M</th>
-                    <th>S</th>
-                    <th>K</th>
-                    <th>GM</th>
-                    <th>GA</th>
-                    <th>SG</th>
-                    <th>Poin</th>
+                    <th style="width: 8%;">Histori</th>
                   </tr>
                   </thead>
                   <tbody>
 
-                    @foreach ($team_data as $t)
-                        
+                    @foreach($team_data as $key)
+
                     <tr>
-                        <td>{{ $t->tim }}</td>
-                        <td>{{ $t->p ?? '0' }}</td>
-                        <td>{{ $t->m ?? '0' }}</td>
-                        <td>{{ $t->s ?? '0' }}</td>
-                        <td>{{ $t->k ?? '0' }}</td>
-                        <td>{{ $t->gm ?? '0' }}</td>
-                        <td>{{ $t->ga ?? '0' }}</td>
-                        <td>{{ @abs($t->gm - $t->ga) ?? '0' }}</td>
-                        <td>{{ $t->poin ?? '0' }}</td>
+                        <td><img width="50" src="{{ asset('img/team/'.$key->team_logo) }}"> &#160;&#160; <span>{{ $key->team_name }}</span></td>
+                        <td>
+                            <a href="{{ url('landing/histori_view/'.$key->team_id) }}"><button class="btn btn-primary btn-sm">Lihat <i class="fa fa-eye"></i></button></a>
+                        </td>
                     </tr>
 
                     @endforeach
