@@ -29,25 +29,30 @@ class TeamController extends Controller
 
         //variable
         $name = $request->name;
-        $penanggung = $request->penanggung;
         $logo = $request->file('logo');
-        $tmp = $_FILES['logo']['tmp_name'];
-        $path = 'img/team/';
+        $penanggung = $request->penanggung;
 
-        //type
-        $ex = explode(".", $logo->getClientOriginalName());
-        $format = end($ex);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'penanggung' => 'required',
+            'logo' => 'image'
+        ]);
 
-        //filter
-        $fil = ['jpg','gif','png','jpeg'];
+        if ($validator->fails()) {
 
-        if (in_array($format, $fil)) {
-            
-            $new_name = md5(date('Y-m-d').time()).'.'.$format;
-            $logo->move($path, $new_name);
+            $ses = ['fail' => 'Data gagal di simpan'];
+        
+        }else{
 
-            //upload
             if ($logo) {
+
+                //type
+                $ex = explode(".", $logo->getClientOriginalName());
+                $format = end($ex);
+                $new_name = md5(date('Y-m-d').time()).'.'.$format;
+
+                //upload
+                $logo->move('img/team', $new_name);
 
                 //save database
                 $team = new Team;
@@ -56,14 +61,17 @@ class TeamController extends Controller
                 $team->team_logo = $new_name;
                 $team->save();
 
-                $ses = ['success' => 'Data berhasil di simpan'];
-            }else{
-                $ses = ['fail' => 'Data gagal di simpan'];
+            } else {
+                
+                //save database
+                $team = new Team;
+                $team->team_name = $name;
+                $team->team_penanggung = $penanggung;
+                $team->team_logo = '';
+                $team->save();
             }
 
-        } else {
-            // no upload
-            $ses = ['fail' => 'Format file tidak di dukung'];
+            $ses = ['success' => 'Data berhasil di simpan'];
         }
 
         return redirect('team')->with($ses);
@@ -94,69 +102,57 @@ class TeamController extends Controller
 
         //variable
         $name = $request->name;
+        $logo = $request->file('logo');
         $penanggung = $request->penanggung;
         $id = $request->id;
 
-        $cek = Musim::where('musim_status','=',1)->count();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'penanggung' => 'required',
+            'logo' => 'image'
+        ]);
 
-        if ($cek == 0) {
+        if ($validator->fails()) {
 
-           if (@$logo) {
-                // logo
+            $ses = ['fail' => 'Data gagal di simpan'];
+        
+        }else{
 
-                $logo = $request->file('logo');
-                $path = 'img/team/';
+            if ($logo) {
 
                 //type
                 $ex = explode(".", $logo->getClientOriginalName());
                 $format = end($ex);
+                $new_name = md5(date('Y-m-d').time()).'.'.$format;
 
-                //filter
-                $fil = ['jpg','gif','png','jpeg'];
-            
-                if (in_array($format, $fil)) {
-                    
-                    $db = Team::where('team_id', $id)->first();
-                    $new_name = $db->team_logo;
-                    $logo->move($path, $new_name);
+                //upload
+                $logo->move('img/team', $new_name);
 
-                    //upload
-                    if ($logo) {
+                //save database
+                $set = [
+                        'team_name' => $name,
+                        'team_penanggung' => $penanggung,
+                        'team_logo' => $new_name,
+                        ];
 
-                        $set = [
-                                'team_name' => $name,
-                                'team_penanggung' => $penanggung,
-                                'team_logo' => $new_name,
-                                ];
-
-                        //save database
-                        Team::where('team_id', $id)->update($set);
-
-                        $ses = ['success' => 'Data berhasil di simpan'];
-                    }else{
-                        $ses = ['fail' => 'Data gagal di simpan'];
-                    }
-
-                } else {
-                    // no upload
-                    $ses = ['fail' => 'Format file tidak di dukung'];
-                }
+                //save database
+                Team::where('team_id', $id)->update($set);
 
             } else {
-                // no logo
-                $update = Team::where('team_id', $id)->update(['team_name' => $name, 'team_penanggung' => $penanggung]);
-                if ($update > 0) {
-                    $ses = ['success' => 'Data berhasil di simpan'];
-                } else {
-                    $ses = ['fail' => 'Data gagal di simpan'];
-                }
-            } 
+                
+                //save database
+                $set = [
+                        'team_name' => $name,
+                        'team_penanggung' => $penanggung,
+                        ];
 
-        } else {
-            
-            $ses = ['fail' => 'Ada musim yang aktif'];
+                //save database
+                Team::where('team_id', $id)->update($set);
+            }
+
+            $ses = ['success' => 'Data berhasil di simpan'];
         }
-        
+
         return redirect('team')->with($ses);
     }
 }

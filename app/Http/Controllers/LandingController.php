@@ -10,7 +10,7 @@ use DB;
 class LandingController extends Controller
 {
     public function index(){
-
+ 
         $data['jadwal_data'] = DB::select("SELECT * FROM jadwal AS a JOIN musim AS b ON a.jadwal_musim = b.musim_id WHERE a.jadwal_status = 0 ORDER BY a.jadwal_pekan + 0 ASC LIMIT 8");
 
         $data['hasil_data'] = DB::select("SELECT * FROM jadwal AS a JOIN musim AS b ON a.jadwal_musim = b.musim_id WHERE a.jadwal_status = 1 ORDER BY a.jadwal_pekan + 0 ASC LIMIT 8");
@@ -76,11 +76,11 @@ class LandingController extends Controller
 
         if (@$musim) {
 
-            $data['hasil_data'] = DB::select("SELECT * FROM jadwal AS a JOIN musim AS b ON a.jadwal_musim = b.musim_id WHERE a.jadwal_status = 1 AND a.jadwal_musim = $musim AND a.jadwal_delete = 1 AND concat(',',jadwal_team,',') LIKE '%,$id,%' ORDER BY a.jadwal_pekan + 0 ASC");
+            $data['hasil_data'] = DB::select("SELECT * FROM histori AS a JOIN musim AS b ON a.histori_musim = b.musim_id WHERE a.histori_status = 1 AND a.histori_musim = $musim AND concat(',',histori_team,',') LIKE '%,$id,%' ORDER BY a.histori_pekan + 0 ASC");
 
         } else {
 
-            $data['hasil_data'] = DB::select("SELECT * FROM jadwal AS a JOIN musim AS b ON a.jadwal_musim = b.musim_id WHERE a.jadwal_status = 1 AND a.jadwal_delete = 1 AND concat(',',jadwal_team,',') LIKE '%,$id,%' ORDER BY a.jadwal_pekan + 0 ASC");
+            $data['hasil_data'] = DB::select("SELECT * FROM histori AS a JOIN musim AS b ON a.histori_musim = b.musim_id WHERE a.histori_status = 1 AND concat(',',histori_team,',') LIKE '%,$id,%' ORDER BY a.histori_pekan + 0 ASC");
         }
 
         $data['musim_data'] = Musim::where('musim_delete',0)->orderBy('musim_id', 'DESC')->get();

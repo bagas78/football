@@ -68,20 +68,20 @@
 
             @foreach($hasil_data as $h)
 
-            @if( in_array($h->jadwal_pekan, $x) < 1)
-                <p style="background: #e9ecef;padding: 1%;" class="font-weight-bold">Pekan ke-{{ $h->jadwal_pekan }}</p>
+            @if( in_array($h->histori_pekan, $x) < 1)
+                <p style="background: #e9ecef;padding: 1%;" class="font-weight-bold">Pekan ke-{{ $h->histori_pekan }}</p>
                 <hr>
             @endif
 
             @php
-                $x[] += $h->jadwal_pekan;
-                $arr = implode(',', explode(',', $h->jadwal_team));
+                $x[] += $h->histori_pekan;
+                $arr = implode(',', explode(',', $h->histori_team));
                 $db = DB::select("SELECT * FROM team WHERE team_id IN($arr)");
             @endphp
 
             <div class="card mb-3">
                 <div class="card-body">
-                    <p class="card-title font-weight-bold" style="font-size: 15px; margin-bottom: 15px;">{{ $hari[date('N', strtotime($h->jadwal_pertandingan)) - 1] }}, {{ date('d/m/Y', strtotime($h->jadwal_pertandingan)) }}</p>
+                    <p class="card-title font-weight-bold" style="font-size: 15px; margin-bottom: 15px;">{{ $hari[date('N', strtotime($h->histori_pertandingan)) - 1] }}, {{ date('d/m/Y', strtotime($h->histori_pertandingan)) }}</p>
 
                     <div class="row card-text">
                         <div class="col-md-4 text-center">
@@ -92,14 +92,14 @@
                         @php
                             $s_a = $db[0]->team_id;
                             $s_b = $db[1]->team_id;
-                            $jad = $h->jadwal_id;
+                            $jad = $h->histori_jadwal;
                             $skor_a = DB::select("SELECT * FROM skor WHERE skor_team = '$s_a' AND skor_jadwal = '$jad'");
                             $skor_b = DB::select("SELECT * FROM skor WHERE skor_team = '$s_b' AND skor_jadwal = $jad");
                         @endphp
 
                         <div class="col-md-4 text-center">
                             <b style="font-size: 18px">{{ @$skor_a[0]->skor_nilai ?? '-' }} vs {{ @$skor_b[0]->skor_nilai ?? '-' }}</b>
-                            <p>Pekan ke-{{ $h->jadwal_pekan }} Musim {{ $h->musim_tahun }}</p>
+                            <p>Pekan ke-{{ $h->histori_pekan }} Musim {{ $h->musim_tahun }}</p>
                         </div>
                         <div class="col-md-4 text-center">
                             <img src="{{ asset('img/team/'.$db[1]->team_logo) }}" height="50">

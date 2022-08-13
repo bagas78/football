@@ -8,6 +8,7 @@ use App\Models\Jadwal;
 use App\Models\Musim;
 use App\Models\Current;
 use App\Models\Skor;
+use App\Models\Histori;
 use Hash;  
 use Session;
 use DB;
@@ -41,9 +42,9 @@ class JadwalController extends Controller
     }
     public function insert(Request $request){
 
-        $team = Team::where('team_delete', 0)->get();
-        $jadwal = Jadwal::where('jadwal_delete', 0)->get();
         $musim = $request->musim;
+        $team = Team::where('team_delete', 0)->get();
+        $jadwal = Jadwal::where('jadwal_delete', 0)->where('jadwal_musim',$musim)->get();
 
         $status = Musim::where('musim_id',$musim)->first();
         
@@ -52,8 +53,9 @@ class JadwalController extends Controller
 
                 //delete table
                 DB::table('current')->delete();  
-                DB::select("UPDATE jadwal SET jadwal_delete = 1");
+                DB::table('jadwal')->where('jadwal_musim',$musim)->delete();
                 DB::select("UPDATE skor SET skor_delete = 1");
+                DB::select("UPDATE histori SET histori_status = 1");
 
                 //team
                 $a = $team->count();
@@ -123,7 +125,7 @@ class JadwalController extends Controller
                         foreach ($team->shuffle() as $t) {
 
                             $t_id = $t['team_id'];
-                            $cek = DB::select("SELECT * FROM jadwal WHERE jadwal_delete = 0 AND jadwal_pekan = '' AND concat(',',jadwal_team,',') LIKE '%,$t_id,%' LIMIT 1");
+                            $cek = DB::select("SELECT * FROM jadwal WHERE jadwal_delete = 0 AND jadwal_pekan = '' AND jadwal_musim = $musim AND concat(',',jadwal_team,',') LIKE '%,$t_id,%' LIMIT 1");
 
                             foreach ($cek as $c) {
 
@@ -159,7 +161,7 @@ class JadwalController extends Controller
                                     
                                     $j_id = $c->jadwal_id;
                                     
-                                    if (Jadwal::where('jadwal_delete',0)->where('jadwal_pekan', $x)->count() < $p) {
+                                    if (Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_pekan', $x)->count() < $p) {
 
                                         //tanggal
                                         $day = $x * 7;
@@ -168,7 +170,7 @@ class JadwalController extends Controller
                                         $date = strtotime("+{$day} day", $date);
                                         $final_date = date('Y-m-d', $date);
 
-                                        $update = Jadwal::where('jadwal_delete',0)->where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x, 'jadwal_pertandingan' => $final_date]);
+                                        $update = Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_id', $j_id)->update(['jadwal_pekan' => $x, 'jadwal_pertandingan' => $final_date]);
                                     }
                                 }
                                 
@@ -178,7 +180,7 @@ class JadwalController extends Controller
 
                         //hapus belum di pakai
                         $cr = '';
-                        foreach (Jadwal::where('jadwal_delete',0)->where('jadwal_pekan',$x)->get() as $key) {
+                        foreach (Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_pekan',$x)->get() as $key) {
                             if ($x == $key->jadwal_pekan) {
                                 
                                 $cr .= $key->jadwal_team.' ';
@@ -209,10 +211,10 @@ class JadwalController extends Controller
 
                    } else {
 
-                        if (Jadwal::where('jadwal_delete',0)->where('jadwal_pekan','')->count() > 0) {
+                        if (Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_pekan','')->count() > 0) {
                             
                             //ada yang kosong
-                            $xx = DB::select("SELECT jadwal_pekan AS pekan,COUNT(jadwal_pekan) AS jum FROM jadwal WHERE jadwal_delete = 0 AND jadwal_pekan != '' GROUP BY jadwal_pekan");
+                            $xx = DB::select("SELECT jadwal_pekan AS pekan,COUNT(jadwal_pekan) AS jum FROM jadwal WHERE jadwal_delete = 0 AND jadwal_musim = $musim AND jadwal_pekan != '' GROUP BY jadwal_pekan");
 
                             foreach ($xx as $key) {
                                 
@@ -227,7 +229,7 @@ class JadwalController extends Controller
                                         $date = strtotime("+{$day} day", $date);
                                         $final_date = date('Y-m-d', $date);
                                         
-                                        Jadwal::where('jadwal_delete',0)->where('jadwal_pekan', '')->take(1)->update(['jadwal_pekan' => $key->pekan, 'jadwal_pertandingan' => $final_date]); 
+                                        Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_pekan', '')->take(1)->update(['jadwal_pekan' => $key->pekan, 'jadwal_pertandingan' => $final_date]); 
                                     }
                                 }
                             }
@@ -238,7 +240,7 @@ class JadwalController extends Controller
                 }
 
 
-                if (Jadwal::where('jadwal_delete',0)->where('jadwal_pekan','')->count() > 0) {
+                if (Jadwal::where('jadwal_delete',0)->where('jadwal_musim',$musim)->where('jadwal_pekan','')->count() > 0) {
                     
                     $ses = ['fail' => 'Data ada yang gagal di simpan'];
                 } else {
@@ -260,7 +262,7 @@ class JadwalController extends Controller
     }
 
     public function delete($id){
-        $update = Jadwal::where('jadwal_id', $id)->update(['jadwal_delete' => 1]);
+        $update = Jadwal::where('jadwal_id', $id)->delete();
 
         if ($update > 0) {
             $ses = ['success' => 'Data berhasil di simpan'];
@@ -324,6 +326,17 @@ class JadwalController extends Controller
 
         //ubah status
         $update = Jadwal::where('jadwal_id', $jadwal)->update(['jadwal_status' => 1]);
+
+        //pindah histori
+        $get = Jadwal::where('jadwal_id', $jadwal)->first();
+
+        $histori = new Histori;
+        $histori->histori_jadwal = $jadwal;
+        $histori->histori_team = $get->jadwal_team;
+        $histori->histori_pekan = $get->jadwal_pekan;
+        $histori->histori_pertandingan = $get->jadwal_pertandingan;
+        $histori->histori_musim = $get->jadwal_musim;
+        $histori->save();
 
         if ($update > 0) {
             $ses = ['success' => 'Data berhasil di simpan'];
